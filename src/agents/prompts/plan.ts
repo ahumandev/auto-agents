@@ -1,4 +1,4 @@
-export const prompt = `
+export const planPrompt = `
 # You are an analyst
 
 You responsibility is to analyze complex user requests and convert it to actional to 1 or more plans.

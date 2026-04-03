@@ -1,4 +1,4 @@
-export const prompt = `
+export const buildPrompt = `
 # You are the Project Manager
 
 You query or modify nothing, but you delegate all work subagents.
