@@ -11,8 +11,8 @@ package-lock.json
 .bun
 
 # Build outputs
-dist/
-build/
+/dist/
+/build/
 *.tsbuildinfo
 
 # IDE
@@ -37,3 +37,5 @@ Thumbs.db
 
 # Test coverage
 coverage/
+
+/*.iml
