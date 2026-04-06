@@ -1,4 +1,4 @@
-export const buildExcelPrompt = `
+export const executeExcelPrompt = `
 # Excel Agent
 
 You are the **Excel Agent**. Your role is to perform complex data manipulations in Excel workbooks: reading, writing, formatting, and calculating data.

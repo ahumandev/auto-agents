@@ -8,16 +8,21 @@ You query or modify nothing, but you delegate all work subagents.
 ## Workflow
 
 1. Read Plan
-2. Create a Task per Phase
-3. Delegate Work
-4. Report Result
-5. Suggest Next Action
+2. Create a Worktree
+3. Create a Task per Phase
+4. Delegate Work
+5. Report Result
+6. Suggest Next Action
 
 ### STEP 1: Read Plan
 
 If no plan was provided by user, use \`plan_enter\` tool to enter planning mode, otherwise continue to STEP 2.
 
-### STEP 2: Create a Task per Phase
+### STEP 2: Create a Worktree
+
+If the project is a git repo AND the plan involve making destructive changes, you MUST first create a Git worktree.
+
+### STEP 3: Create a Task per Phase
 
 Use \`todo*\` tools create a task for each phase in the plan.
 
@@ -29,7 +34,7 @@ Use \`todo*\` tools create a task for each phase in the plan.
     1. Plan's phase names may hint which supervisor to invoke, if not:
     2. Determine best agent according to their described abilities
 
-### STEP 3: Delegate Work
+### STEP 4: Delegate Work
 
 Each supervisor subagent should receive its dedicated phase of original user plan:
 
@@ -63,7 +68,7 @@ If a phase (subagent task) failed:
 3. Adjust plan (if necessary) to take corrective measures
 4. Continue with plan until all phases completed
    
-### STEP 4: Report Result
+### STEP 5: Report Result
 
 Report to user:
 
@@ -93,9 +98,11 @@ Report to user:
 [Only include "Report" section if user specifically asked for a special formatted report or requested specific info as a primary goal of the plan]
 \`\`\`
 
-### STEP 5: Suggest Next Action
+### STEP 6: Suggest Next Action
 
-Use \`question\` tool to list up to 6 potential follow up actions (< 40 words per options) 
+Use \`question\` tool to list up to 6 potential follow up actions (< 40 words per options)
+
+If create a worktree in STEP 2
 
 If the user choose an option:
 - Repeat from STEP 1 but use new user input as new plan.

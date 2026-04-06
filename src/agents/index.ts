@@ -1,24 +1,27 @@
 import type { AgentConfig } from "@opencode-ai/sdk/v2"
 import { askPrompt } from "./prompts/ask";
-import { buildPrompt } from "./prompts/build"
-import { buildDocumentPrompt } from "./prompts/build/document"
-import { buildExcelPrompt } from "./prompts/build/excel";
 import { buildFeaturePrompt } from "./prompts/build/feature";
 import { buildFormatPrompt } from "./prompts/build/format";
 import { buildGeneralPrompt } from "./prompts/build/general";
 import { buildGitCommitPrompt } from "./prompts/build/git_commit";
-import { buildOptimizePrompt } from "./prompts/build/optimize";
+import { buildPrompt } from "./prompts/build"
+import { buildRefactorPrompt } from "./prompts/build/refactor";
+import { buildResearchPrompt } from "./prompts/build/research";
 import { buildTestPrompt} from "./prompts/build/test";
 import { buildTroubleshootPrompt } from "./prompts/build/troubleshoot";
-import { documentConventionsPrompt } from "./prompts/build/document/conventions"
-import { documentDesignPrompt } from "./prompts/build/document/design"
-import { documentInstallPrompt } from "./prompts/build/document/install"
-import { documentPrdPrompt } from "./prompts/build/document/prd"
-import { documentReadmePrompt } from "./prompts/build/document/readme"
-import { documentSecurityPrompt } from "./prompts/build/document/security"
-import { documentUxPrompt } from "./prompts/build/document/ux"
-import { executePrompt } from "./prompts/execute";
+import { documentConventionsPrompt } from "./prompts/execute/document/conventions"
+import { documentDesignPrompt } from "./prompts/execute/document/design"
+import { documentInstallPrompt } from "./prompts/execute/document/install"
+import { documentPrdPrompt } from "./prompts/execute/document/prd"
+import { documentReadmePrompt } from "./prompts/execute/document/readme"
+import { documentSecurityPrompt } from "./prompts/execute/document/security"
+import { documentUxPrompt } from "./prompts/execute/document/ux"
+import { executeAuthorPrompt } from "./prompts/execute/author";
+import { executeCodePrompt } from "./prompts/execute/code";
+import { executeDocumentPrompt } from "./prompts/execute/document"
+import { executeExcelPrompt } from "./prompts/execute/excel";
 import { executeOsPrompt } from "./prompts/execute/os";
+import { executePrompt } from "./prompts/execute";
 import { planPrompt } from "./prompts/plan"
 import { queryBrowserPrompt } from "./prompts/query/browser";
 import { queryCodePrompt } from "./prompts/query/code";
@@ -26,7 +29,6 @@ import { queryExcelPrompt } from "./prompts/query/excel";
 import { queryGitPrompt } from "./prompts/query/git";
 import { queryTextPrompt } from "./prompts/query/text";
 import { queryWebPrompt } from "./prompts/query/web";
-import {executeMdPrompt} from "@/agents/prompts/execute/md";
 
 type ModelTier = "fast" | "balanced" | "smart"
 type AgentConfigWithTier = AgentConfig & { tier?: ModelTier }
@@ -62,6 +64,8 @@ const agents: AgentMap = {
         tier: "smart",
     },
 
+    // build agents are smart agents that translate user problems to actionable processes or tasks (does no work itself)
+
     build: {
         color: "#FF40FF",
         description: "Build planned phases",
@@ -82,45 +86,6 @@ const agents: AgentMap = {
         tier: "smart",
     },
 
-    build_document: {
-        color: "#B030B0",
-        description: "Task `document` to keep project documentation up to date",
-        mode: "subagent",
-        permission: {
-            "*": "deny",
-            doom_loop: "allow",
-            task: {
-                "*": "deny",
-                "document_*": "allow"
-            },
-            "todo*": "allow",
-        },
-        prompt: buildDocumentPrompt,
-        temperature: 0.1,
-        tier: "balanced",
-    },
-
-    build_excel: {
-        color: "#B03030",
-        description: "Task `build_excel` to orchestrate excel workbook manipulations and data validation",
-        mode: "subagent",
-        permission: {
-            "*": "deny",
-            doom_loop: "ask",
-            external_directory: "ask",
-            task: {
-                "*": "deny",
-                "excel_*": "allow",
-                query_excel: "allow",
-                query_text: "allow"
-            },
-            "todo*": "allow",
-        },
-        prompt: buildExcelPrompt,
-        temperature: 0.3,
-        tier: "balanced",
-    },
-
     build_feature: {
         color: "#B03030",
         description: "Task `build_feature` to create new project or feature: write code, write tests, run tests, fix failures, confirm requirement is met",
@@ -128,10 +93,7 @@ const agents: AgentMap = {
         permission: {
             "*": "deny",
             "codesearch": "allow",
-            "context7*": "allow",
             doom_loop: "ask",
-            edit: "allow",
-            external_directory: "ask",
             skill: {
                 "*": "deny",
                 "code*": "allow",
@@ -140,7 +102,8 @@ const agents: AgentMap = {
                 "*": "deny",
                 build_test: "allow",
                 build_troubleshoot: "allow",
-                os: "allow",
+                execute_code: "allow",
+                execute_os: "allow",
                 query_code: "allow",
                 query_git: "allow",
                 query_text: "allow"
@@ -149,7 +112,7 @@ const agents: AgentMap = {
         },
         prompt: buildFeaturePrompt,
         temperature: 0.3,
-        tier: "balanced",
+        tier: "smart",
     },
 
     build_format: {
@@ -169,7 +132,7 @@ const agents: AgentMap = {
         },
         prompt: buildFormatPrompt,
         temperature: 0.3,
-        tier: "balanced",
+        tier: "smart",
     },
 
     build_general: {
@@ -188,7 +151,7 @@ const agents: AgentMap = {
             },
         },
         prompt: buildGeneralPrompt,
-        tier: "balanced",
+        tier: "smart",
     },
 
     build_git_commit: {
@@ -210,32 +173,50 @@ const agents: AgentMap = {
         },
         prompt: buildGitCommitPrompt,
         temperature: 0.1,
-        tier: "balanced",
+        tier: "smart",
     },
 
-    build_optimize: {
+    build_refactor: {
         color: "#B03030",
-        description: "Task `build_optimize` to improve existing code without changing behavior: optimize performance, readability, efficiency",
+        description: "Task `build_refactor` to improve existing code without changing behavior: optimize performance, readability, efficiency",
         mode: "subagent",
         permission: {
             "*": "deny",
+            codesearch: "allow",
             doom_loop: "ask",
-            edit: "allow",
-            external_directory: "ask",
             skill: {
                 "*": "deny",
                 "code*": "allow",
             },
             task: {
                 "*": "deny",
-                os: "allow",
+                execute_os: "allow",
                 query_code: "allow",
                 query_git: "allow",
             },
             "todo*": "allow",
         },
-        prompt: buildOptimizePrompt,
+        prompt: buildRefactorPrompt,
         temperature: 0.3,
+        tier: "smart",
+    },
+
+    build_research: {
+        color: "#30B040",
+        description: "Task `build_research` to query data, create research reports, find info user requested",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            codesearch: "allow",
+            doom_loop: "ask",
+            task: {
+                "*": "deny",
+                "query*": "allow",
+            },
+            "todo*": "allow",
+        },
+        prompt: buildResearchPrompt,
+        temperature: 0.5,
         tier: "balanced",
     },
 
@@ -249,7 +230,7 @@ const agents: AgentMap = {
             edit: "allow",
             task: {
                 "*": "deny",
-                os: "allow",
+                execute_os: "allow",
                 query_code: "allow",
                 query_git: "allow",
                 query_text: "allow",
@@ -271,7 +252,7 @@ const agents: AgentMap = {
             edit: "allow",
             task: {
                 "*": "deny",
-                os: "allow",
+                execute_os: "allow",
                 query_browser: "allow",
                 query_code: "allow",
                 query_git: "allow",
@@ -298,7 +279,7 @@ const agents: AgentMap = {
             },
             task: {
                 "*": "deny",
-                os: "allow",
+                execute_os: "allow",
                 query_code: "allow",
                 query_git: "allow",
             },
@@ -469,6 +450,8 @@ const agents: AgentMap = {
         tier: "fast",
     },
 
+    // executors execute a task immediately without planning (may delegate work to slaves)
+
     execute: {
         color: "#FF4040",
         description: "Execute basic tasks without analysis or planning",
@@ -486,11 +469,7 @@ const agents: AgentMap = {
             task: {
                 "*": "allow",
                 ask: "deny",
-                build: "deny",
-                build_init: "deny",
-                build_recover: "deny",
-                build_retry: "deny",
-                build_revise: "deny",
+                "build*": "deny",
                 plan: "deny",
             },
             "todo*": "allow"
@@ -499,9 +478,9 @@ const agents: AgentMap = {
         tier: "smart",
     },
 
-    execute_md: {
+    execute_author: {
         color: "#802020",
-        description: "Task `execute_md` to creates and updates documentation, articles, and technical content according to precise instructions; DO NOT used to edit source code or system config",
+        description: "Task `execute_author` to create or update documents, articles, agentic instructions or general Markdown; DO NOT used to edit source code or system config",
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -518,8 +497,74 @@ const agents: AgentMap = {
             },
             "todo*": "allow",
         },
-        prompt: executeMdPrompt,
+        prompt: executeAuthorPrompt,
         temperature: 0.5,
+        tier: "balanced",
+    },
+
+    execute_code: {
+        color: "#802020",
+        description: "Task `execute_code` to update the codebase with code, scripts, config, templates according to plain precise instructions; NEVER write md files with this agent",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            "codesearch": "allow",
+            "context7*": "allow",
+            doom_loop: "ask",
+            edit: "allow",
+            external_directory: "ask",
+            glob: "allow",
+            grep: "allow",
+            list: "allow",
+            lsp: "allow",
+            read: "allow",
+            skill: {
+                "*": "deny",
+                "code*": "allow",
+            },
+            "todo*": "allow"
+        },
+        prompt: executeCodePrompt,
+        temperature: 0.1,
+        tier: "balanced",
+    },
+
+    execute_document: {
+        color: "#802080",
+        description: "Task `execute_document` to keep project documentation up to date",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "allow",
+            task: {
+                "*": "deny",
+                "document_*": "allow"
+            },
+            "todo*": "allow",
+        },
+        prompt: executeDocumentPrompt,
+        temperature: 0.1,
+        tier: "balanced",
+    },
+
+    execute_excel: {
+        color: "#802020",
+        description: "Task `build_excel` to orchestrate excel workbook manipulations and data validation",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            external_directory: "ask",
+            task: {
+                "*": "deny",
+                "excel_*": "allow",
+                query_excel: "allow",
+                query_text: "allow"
+            },
+            "todo*": "allow",
+        },
+        prompt: executeExcelPrompt,
+        temperature: 0.3,
         tier: "balanced",
     },
 
@@ -570,6 +615,8 @@ const agents: AgentMap = {
         temperature: 0.7,
         tier: "smart",
     },
+
+    // query agents are slaves are only concerned about a specific domain to query
 
     query_browser: {
         color: "#208020",

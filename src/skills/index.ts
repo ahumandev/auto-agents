@@ -1,9 +1,9 @@
 import { mkdir, writeFile } from "fs/promises"
 import { tmpdir } from "os"
 import path from "path"
-import { mdArticleSkill } from "./md/article";
-import { mdRulesSkill } from "./md/rules";
-import { mdTaskSkill } from "./md/task";
+import { authorArticleSkill } from "./md/article";
+import { authorRulesSkill } from "./md/rules";
+import { authorTaskSkill } from "./md/task";
 import { testJestSkill } from "./test/jest"
 import { testJunitSkill } from "./test/junit"
 import { testMockitoSkill } from "./test/mockito"
@@ -17,9 +17,9 @@ export type ManagedSkillDefinition = {
 }
 
 export const managedSkills: ManagedSkillDefinition[] = [
-    mdArticleSkill,
-    mdRulesSkill,
-    mdTaskSkill,
+    authorArticleSkill,
+    authorRulesSkill,
+    authorTaskSkill,
     testJestSkill,
     testVitestSkill,
     testJunitSkill,

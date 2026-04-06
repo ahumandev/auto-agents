@@ -1,7 +1,7 @@
-export const mdRulesSkill = {
-    name: "md_rules",
-    description: "Apply `md_rules` skill when writing agentic rules, constraints, instructions, like AGENTS.md",
-    directory: ["md", "rules"],
+export const authorRulesSkill = {
+    name: "author_rules",
+    description: "Apply `author_rules` skill when writing agentic rules, constraints, instructions, like AGENTS.md",
+    directory: ["author", "rules"],
     content: `
 - Use logically organize bullet points in sections
 - Each point < 20 words

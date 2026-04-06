@@ -1,7 +1,7 @@
-export const mdTaskSkill = {
-    name: "md_task",
-    description: "Apply `md_task` skill when writing agentic tasks.",
-    directory: ["md", "task"],
+export const authorTaskSkill = {
+    name: "author_task",
+    description: "Apply `author_task` skill when writing agentic tasks.",
+    directory: ["author", "task"],
     content: `    
 - Instructions are provided in numerical points 
 - Each point < 40 words

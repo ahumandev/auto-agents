@@ -1,7 +1,7 @@
-export const mdArticleSkill = {
-    name: "md_article",
-    description: "Apply `md_article` skill when writing human readable articles",
-    directory: ["md", "article"],
+export const authorArticleSkill = {
+    name: "author_article",
+    description: "Apply `author_article` skill when writing human readable articles",
+    directory: ["author", "article"],
     content: `
 - Use numerical points if the article mentions a specific sequence or priority
 - Use bullet points only to list items
@@ -24,20 +24,23 @@ export const mdArticleSkill = {
 - Organize sentences in paragraphs such that each paragraph communicate 1 message
 - A paragraph typically start with a statement/fact, then contain sentences that explain this statement with examples.
 - Merge repetitions
-- Add markdown links in text to online websites or external md files in content if content was based on an external source
 - Rephrase confusing explanations, contradictions or fallacies
 - If author make controversial statement: add typical critique (argument) and defence (counter-argument)
 - Never modify quoted text even if it contains errors
-- Convert underscore headers \`-------------\` with hashed prefix headers \`##\`
-- Content should be markdown linter compliant
 - Article's main title should be H1 header level
 - There should only be 1 H2 title
 - All titles should Capitalize first letter of every word except short prepositions < 4 character like (in, on, at, to, by, of, up) and conjunctions like (and, but, for, or, not, so, yet) and articles (a, an, the)
 - Ensure logical header hierarchy (no skipped levels)
 - Large sections (> 25 lines) should be sub-dived into smaller sub-sections
 - Ensure the content of the article does not deviate from topic of mentioned in the introduction section
-- Code examples must be displayed in md code blocks specifying the correct language attribute
 - Prefer grouping instructions and examples together so that reader can follow instructions without jumping around in article
+
+## Markdown instructions
+
+- Convert underscore headers \`-------------\` with hashed prefix headers \`##\`
+- Content should be markdown linter compliant
+- Code examples must be displayed in md code blocks specifying the correct language attribute
+- Add markdown links in text to online websites or external md files in content if content was based on an external source
 
 For example:
 - In the case of a \`README.md\` file, the "Introduction" = "Purpose of {Project Name}" and "Conclusion" = brief architectural summary of how the project solve this purpose
