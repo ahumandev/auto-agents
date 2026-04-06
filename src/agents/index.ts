@@ -472,7 +472,6 @@ const agents: AgentMap = {
                 "*": "allow",
                 "code*": "deny"
             },
-            submit_plan: "allow",
             task: {
                 "*": "allow",
                 ask: "deny",
