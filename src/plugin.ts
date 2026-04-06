@@ -1,6 +1,6 @@
 import { Plugin } from "@opencode-ai/plugin"
 import type { Config } from "@opencode-ai/sdk/v2"
-import { agents } from "./agents"
+import agents from "./agents"
 import { ensureGeneratedSkills, injectGeneratedSkillsPath } from "./skills"
 
 /**

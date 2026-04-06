@@ -11,7 +11,7 @@
     }
   },
   "scripts": {
-    "build": "rm -rf dist && bun build src/plugin.ts --outdir dist --target bun && tsc --emitDeclarationOnly --noEmit false",
+    "build": "rm -rf dist && bun build src/plugin.ts --outdir dist --target bun && tsc --emitDeclarationOnly --noEmit false && bun scripts/install-plugin-shim.mjs",
     "watch": "rm -rf dist && bun build src/plugin.ts --outdir dist --target bun --watch & tsc --emitDeclarationOnly --noEmit false --watch",
     "test": "bun test",
     "typecheck": "tsc --noEmit"

@@ -1,9 +1,9 @@
 import { mkdir, writeFile } from "fs/promises"
 import { tmpdir } from "os"
 import path from "path"
-import { authorArticleSkill } from "./md/article";
-import { authorRulesSkill } from "./md/rules";
-import { authorTaskSkill } from "./md/task";
+import { authorArticleSkill } from "./author/article";
+import { authorRulesSkill } from "./author/rules";
+import { authorTaskSkill } from "./author/task";
 import { testJestSkill } from "./test/jest"
 import { testJunitSkill } from "./test/junit"
 import { testMockitoSkill } from "./test/mockito"
