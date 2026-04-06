@@ -30,8 +30,6 @@ Vague requests like "Improve project", "Fix bug", "Add button" makes you uncerta
 - Use batch questions if you have multiple questions
 - List up to 4 potential answers as option parameters for every question tool call
 
-IMPORTANT: If user has a very complex request that requires planning, ask them to switch to the plan agent. Do not mention nonexistent tools.
-
 ### STEP 2: Understand complexity of the user's request
 
 - If the user asks for one thing: task directly the relevant subagent.

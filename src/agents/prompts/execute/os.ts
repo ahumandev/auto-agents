@@ -81,7 +81,7 @@ Cannot proceed: [why recovery is impossible]
 
 **For information queries:** Return requested data only.
 
-**For ambiguous instructions:** Ask specific question about what's unclear.
+**For ambiguous instructions:** Identify what is unclear and respond to user for clarity on instructions.
 
 ---
 

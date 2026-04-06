@@ -36,15 +36,9 @@ type ModelTier = "fast" | "balanced" | "smart"
 type AgentConfigWithTier = AgentConfig & { tier?: ModelTier }
 type AgentMap = Record<string, AgentConfigWithTier>
 
-/**
- * read-only = green
- * writable = red
- * blue = orchestrators
- */
-
 const agents: AgentMap = {
     ask: {
-        color: "#40FF40",
+        color: "#FFFF40",
         description: "Generate research reports (read-only)",
         mode: "primary",
         permission: {
@@ -69,7 +63,7 @@ const agents: AgentMap = {
     // build agents are smart agents that translate user problems to actionable processes or tasks (does no work itself)
 
     build: {
-        color: "#FF40FF",
+        color: "#4080FF",
         description: "Execute an existing approved plan by delegating its phases",
         hidden: false, // "false" required by Plannotator
         mode: "primary",
@@ -90,7 +84,7 @@ const agents: AgentMap = {
     },
 
     build_feature: {
-        color: "#B03030",
+        color: "#204080",
         description: "Task `build_feature` to create new project, features: Implement new API's, classes, components, css styles, packages, scripts, templates, webpages",
         mode: "subagent",
         permission: {
@@ -119,7 +113,7 @@ const agents: AgentMap = {
     },
 
     build_format: {
-        color: "#B03030",
+        color: "#204080",
         description: "Task `build_format` to format text files",
         mode: "subagent",
         permission: {
@@ -141,7 +135,7 @@ const agents: AgentMap = {
     },
 
     build_general: {
-        color: "#B0B030",
+        color: "#204080",
         description: "Fallback to `build_general` when no specialized build agent clearly fits task",
         mode: "subagent",
         permission: {
@@ -161,7 +155,7 @@ const agents: AgentMap = {
     },
 
     build_git_commit: {
-        color: "#B03030",
+        color: "#204080",
         description: "Task `build_git_commit` only if reviewing changes and creating professional git commits",
         mode: "subagent",
         permission: {
@@ -182,7 +176,7 @@ const agents: AgentMap = {
     },
 
     build_refactor: {
-        color: "#B03030",
+        color: "#204080",
         description: "Task `build_refactor` to upgrade, migrate or optimize code: improve security, performance, readability, efficiency, maintainability",
         mode: "subagent",
         permission: {
@@ -208,7 +202,7 @@ const agents: AgentMap = {
     },
 
     build_research: {
-        color: "#30B040",
+        color: "#204080",
         description: "Task `build_research` to query data, create research reports, find info user requested",
         mode: "subagent",
         permission: {
@@ -227,7 +221,7 @@ const agents: AgentMap = {
     },
 
     build_review_api: {
-        color: "#B03030",
+        color: "#204080",
         description: "Task `build_review_api` to review API changes: check endpoints, run tests, fix failures, and confirm API requirements are met",
         mode: "subagent",
         permission: {
@@ -249,7 +243,7 @@ const agents: AgentMap = {
     },
 
     build_review_ui: {
-        color: "#B03030",
+        color: "#204080",
         description: "Task `build_review_ui` to review UI changes: run application, inspect UI, run tests, and confirm UI requirements are met",
         mode: "subagent",
         permission: {
@@ -272,7 +266,7 @@ const agents: AgentMap = {
     },
 
     build_test: {
-        color: "#B03030",
+        color: "#204080",
         description: "Task `build_test` to write or fix tests and, when explicitly needed, targeted code/config support for passing verification",
         mode: "subagent",
         permission: {
@@ -298,7 +292,7 @@ const agents: AgentMap = {
     },
 
     build_troubleshoot: {
-        color: "#B03030",
+        color: "#204080",
         description: "Task `build_troubleshoot` to orchestrate diagnosis, delegated fixes, and verification until resolved",
         mode: "subagent",
         permission: {
@@ -536,7 +530,7 @@ const agents: AgentMap = {
     },
 
     execute_document: {
-        color: "#802080",
+        color: "#B03030",
         description: "Task `execute_document` to maintain agent/project memory docs for agents via document_* specialists",
         mode: "subagent",
         permission: {
@@ -598,7 +592,7 @@ const agents: AgentMap = {
     },
 
     plan: {
-        color: "#40FFFF",
+        color: "#40FF40",
         description: "Interactive Planning - Interview user, research problem, and create implementation plans",
         mode: "primary",
         permission: {
