@@ -1,10 +1,13 @@
 import { mkdir, writeFile } from "fs/promises"
 import { tmpdir } from "os"
 import path from "path"
-import { testJestSkill } from "./test_jest"
-import { testJunitSkill } from "./test_junit"
-import { testMockitoSkill } from "./test_mockito"
-import { testVitestSkill } from "./test_vitest"
+import { mdArticleSkill } from "./md/article";
+import { mdRulesSkill } from "./md/rules";
+import { mdTaskSkill } from "./md/task";
+import { testJestSkill } from "./test/jest"
+import { testJunitSkill } from "./test/junit"
+import { testMockitoSkill } from "./test/mockito"
+import { testVitestSkill } from "./test/vitest"
 
 export type ManagedSkillDefinition = {
     name: string
@@ -14,6 +17,9 @@ export type ManagedSkillDefinition = {
 }
 
 export const managedSkills: ManagedSkillDefinition[] = [
+    mdArticleSkill,
+    mdRulesSkill,
+    mdTaskSkill,
     testJestSkill,
     testVitestSkill,
     testJunitSkill,

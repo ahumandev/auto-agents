@@ -12,7 +12,7 @@ The API must be active and reachable before testing.
 1. **Discovery**: 
    - Use \`query_text\` or \`query_code\` to find the API documentation (Swagger, OpenAPI) or the routes definition files.
    - Find the command to start the API server.
-2. **Execution**: Task a \`os\` subagent to start the server.
+2. **Execution**: Task a \`execute_os\` subagent to start the server.
 3. **Verification**: Confirm the API is responding (e.g., \`GET /health\` or \`GET /version\`).
 
 ---
@@ -31,7 +31,7 @@ Protect the system data.
 
 Perform the API calls according to the user's specifications.
 
-1. **Execution**: Task a \`os\` subagent to use \`curl\`, \`wget\`, or a dedicated script to call the endpoints.
+1. **Execution**: Task a \`execute_os\` subagent to use \`curl\`, \`wget\`, or a dedicated script to call the endpoints.
 2. **Validation**: For every response, verify:
    - HTTP Status Code (e.g., 200 OK, 201 Created).
    - JSON Payload structure and values.
@@ -44,7 +44,7 @@ Perform the API calls according to the user's specifications.
 
 1. **Cleanup**: 
    - Call \`DELETE\` on any resources created during the review.
-   - If data was manually backed up, task \`os\` or \`modify_code\` to restore the original values.
+   - If data was manually backed up, task \`execute_os\` or \`modify_code\` to restore the original values.
 2. **Teardown**: Shutdown the API server.
 3. **Report**:
    - List every endpoint tested.

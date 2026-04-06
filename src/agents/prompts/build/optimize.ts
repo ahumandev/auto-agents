@@ -43,7 +43,7 @@ Use your tools to optimize only the requested code.
 
 Run the existing test suite to confirm no behavior was broken.
 
-Task \`os\` subagent with instructions to:
+Task \`execute_os\` subagent with instructions to:
 1. Run the existing tests that cover the optimized code (use the test command identified in Phase 2)
 2. Report the full output (pass/fail counts, error messages, any warnings)
 

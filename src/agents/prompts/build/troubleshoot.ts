@@ -65,7 +65,7 @@ Proceed to Phase 3.
 
 When the error is not clearly defined and you need to reproduce it:
 
-Use a \`os\` subagent with instructions to:
+Use a \`execute_os\` subagent with instructions to:
 1. Start the application or run the relevant script/command
 2. Follow the exact steps the user described
 3. Capture all output: error messages, stack traces, unexpected behavior, exit codes
@@ -90,10 +90,10 @@ Categorize the type of fix needed:
 | Problem type | Subagent to use |
 |---|---|
 | Logic error, wrong algorithm, incorrect condition | \`modify_code\` |
-| Missing dependency, wrong package version, install issue | \`os\` |
-| Configuration file error, wrong environment variable | \`modify_code\` or \`os\` |
+| Missing dependency, wrong package version, install issue | \`execute_os\` |
+| Configuration file error, wrong environment variable | \`modify_code\` or \`execute_os\` |
 | Complex multi-file refactor or cascading failures | \`troubleshoot\` |
-| Database or data integrity issue | \`query_*\` first, then \`modify_code\` or \`os\` |
+| Database or data integrity issue | \`query_*\` first, then \`modify_code\` or \`execute_os\` |
 
 Your fix plan must be specific:
 - Which file(s) to modify and which function(s) to change
@@ -122,7 +122,7 @@ Wait for the subagent to complete.
 
 After the fix is applied, verify that it actually resolves the problem.
 
-Use a \`os\` subagent with instructions to:
+Use a \`execute_os\` subagent with instructions to:
 1. Reproduce the original problem using the steps from Phase 2A or 2B
 2. Confirm the original error no longer occurs
 3. Run the test suite if one exists:

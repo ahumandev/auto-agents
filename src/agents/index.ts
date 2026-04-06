@@ -18,6 +18,7 @@ import { documentReadmePrompt } from "./prompts/build/document/readme"
 import { documentSecurityPrompt } from "./prompts/build/document/security"
 import { documentUxPrompt } from "./prompts/build/document/ux"
 import { executePrompt } from "./prompts/execute";
+import { executeOsPrompt } from "./prompts/execute/os";
 import { planPrompt } from "./prompts/plan"
 import { queryBrowserPrompt } from "./prompts/query/browser";
 import { queryCodePrompt } from "./prompts/query/code";
@@ -25,7 +26,7 @@ import { queryExcelPrompt } from "./prompts/query/excel";
 import { queryGitPrompt } from "./prompts/query/git";
 import { queryTextPrompt } from "./prompts/query/text";
 import { queryWebPrompt } from "./prompts/query/web";
-import { osPrompt } from "./prompts/os";
+import {executeMdPrompt} from "@/agents/prompts/execute/md";
 
 type ModelTier = "fast" | "balanced" | "smart"
 type AgentConfigWithTier = AgentConfig & { tier?: ModelTier }
@@ -498,7 +499,31 @@ const agents: AgentMap = {
         tier: "smart",
     },
 
-    os: {
+    execute_md: {
+        color: "#802020",
+        description: "Task `execute_md` to creates and updates documentation, articles, and technical content according to precise instructions; DO NOT used to edit source code or system config",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            edit: "allow",
+            external_directory: "ask",
+            glob: "allow",
+            grep: "allow",
+            list: "allow",
+            read: "allow",
+            skill: {
+                "*": "deny",
+                "md_*": "allow"
+            },
+            "todo*": "allow",
+        },
+        prompt: executeMdPrompt,
+        temperature: 0.5,
+        tier: "balanced",
+    },
+
+    execute_os: {
         color: "#802020",
         description: "Task `os` to execute scripts, bash commands, move/rename files/directories or administrate operating system; Not intended for read/write local codebase content, not intended for browser automation, not intended for any online tasks",
         mode: "subagent",
@@ -516,7 +541,7 @@ const agents: AgentMap = {
             read: "allow",
             "todo*": "allow",
         },
-        prompt: osPrompt,
+        prompt: executeOsPrompt,
         temperature: 0.1,
         tier: "balanced", // Not "fast", because it needs to make dangerous decisions
     },

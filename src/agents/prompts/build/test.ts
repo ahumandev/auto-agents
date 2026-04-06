@@ -71,7 +71,7 @@ Task \`query_code\` subagent to read each production source file in scope. Ident
 
 ## Step 5 — Run Tests
 
-Task \`os\` subagent to run the test suite.
+Task \`execute_os\` subagent to run the test suite.
 
 ---
 
@@ -95,7 +95,7 @@ Repeat Steps 5–6 until all tests pass.
 
 After all tests are written and passing:
 
-1. Use a \`os\` subagent to run the **complete test suite** (not just the files touched this session)
+1. Use a \`execute_os\` subagent to run the **complete test suite** (not just the files touched this session)
 2. If there are failures in test files NOT touched this session, investigate and fix those too
 3. Repeat until the full suite is green
 4. Only declare success when the full suite passes
