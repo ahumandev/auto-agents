@@ -2,6 +2,7 @@ import type { AgentConfig } from "@opencode-ai/sdk/v2"
 import { askPrompt } from "./prompts/ask";
 import { buildPrompt } from "./prompts/build"
 import { buildDocumentPrompt } from "./prompts/build/document"
+import { buildExcelPrompt } from "./prompts/build/excel";
 import { documentConventionsPrompt } from "./prompts/build/document/conventions"
 import { documentDesignPrompt } from "./prompts/build/document/design"
 import { documentInstallPrompt } from "./prompts/build/document/install"
@@ -11,6 +12,13 @@ import { documentSecurityPrompt } from "./prompts/build/document/security"
 import { documentUxPrompt } from "./prompts/build/document/ux"
 import { executePrompt } from "./prompts/execute";
 import { planPrompt } from "./prompts/plan"
+import { queryBrowserPrompt } from "@/agents/prompts/query/browser";
+import { queryCodePrompt } from "@/agents/prompts/query/code";
+import { queryExcelPrompt } from "@/agents/prompts/query/excel";
+import { queryGitPrompt } from "@/agents/prompts/query/git";
+import { queryTextPrompt } from "@/agents/prompts/query/text";
+import { queryWebPrompt } from "@/agents/prompts/query/web";
+import {buildFeaturePrompt} from "@/agents/prompts/build/feature";
 
 type ModelTier = "fast" | "balanced" | "smart"
 type AgentConfigWithTier = AgentConfig & { tier?: ModelTier }
@@ -19,12 +27,12 @@ type AgentMap = Record<string, AgentConfigWithTier>
 /**
  * read-only = green
  * writable = red
- * blue = extra fast (skip layers)
+ * blue = orchestrators
  */
 
 export const agents: AgentMap = {
     ask: {
-        color: "#40FF80",
+        color: "#40FF40",
         description: "Generate reports (read-only)",
         mode: "primary",
         permission: {
@@ -46,7 +54,7 @@ export const agents: AgentMap = {
     },
 
     build: {
-        color: "#FF4040",
+        color: "#FF40FF",
         description: "Build planned phases",
         hidden: false, // "false" required by Plannotator
         mode: "primary",
@@ -66,7 +74,7 @@ export const agents: AgentMap = {
     },
 
     build_document: {
-        color: "#802020",
+        color: "#B030B0",
         description: "Task `document` to keep project documentation up to date",
         mode: "subagent",
         permission: {
@@ -80,6 +88,48 @@ export const agents: AgentMap = {
         },
         prompt: buildDocumentPrompt,
         temperature: 0.1,
+        tier: "balanced",
+    },
+
+    build_excel: {
+        color: "#B03030",
+        description: "Task `build_excel` to orchestrate excel workbook manipulations and data validation",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            task: {
+                "*": "deny",
+                "excel_*": "allow",
+                query_excel: "allow",
+            },
+            "todo*": "allow",
+        },
+        prompt: buildExcelPrompt,
+        temperature: 0.3,
+        tier: "balanced",
+    },
+
+    build_feature: {
+        color: "#B03030",
+        description: "Task `build_feature` to create new project or feature: write code, write tests, run tests, fix failures, confirm requirement is met",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            task: {
+                "*": "deny",
+                modify_code: "allow",
+                modify_os: "allow",
+                query_code: "allow",
+                query_git: "allow",
+                build_test: "allow",
+                build_troubleshoot: "allow",
+            },
+            "todo*": "allow",
+        },
+        prompt: buildFeaturePrompt,
+        temperature: 0.3,
         tier: "balanced",
     },
 
@@ -229,7 +279,7 @@ export const agents: AgentMap = {
     },
 
     execute: {
-        color: "#FF4080",
+        color: "#FF4040",
         description: "Execute basic tasks without analysis or planning",
         hidden: false,
         mode: "primary",
@@ -259,7 +309,7 @@ export const agents: AgentMap = {
     },
 
     plan: {
-        color: "#40FF40",
+        color: "#40FFFF",
         description: "Interactive Planning - Interview user, research problem, and create implementation plans",
         mode: "primary",
         permission: {
@@ -280,6 +330,127 @@ export const agents: AgentMap = {
         prompt: planPrompt,
         temperature: 0.7,
         tier: "smart",
+    },
+
+    query_browser: {
+        color: "#208020",
+        description: "Use this agent for frontend development & testing - Debug, test and verify YOUR RUNNING APPLICATION: inspect DOM elements, read console logs, analyze network requests, click UI elements, test performance and automate frontend testing. NOT for online research nor internet searches.",
+        hidden: true,
+        mode: "subagent",
+        permission: {
+            '*': "deny",
+            "chrome*": "allow",
+            "doom_loop": "ask",
+            "todo*": "allow"
+        },
+        prompt: queryBrowserPrompt,
+        tier: "fast",
+    },
+
+    query_code: {
+        color: "#208020",
+        description: "Task `query_code` to search, find, locate, summarize, report or understand: source code, scripts or codebase - NOT for reading entire files, instead use `read` tool to read entire file content",
+        hidden: true,
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            codesearch: "allow",
+            "context7*": "allow",
+            doom_loop: "ask",
+            external_directory: "allow",
+            glob: "allow",
+            grep: "allow",
+            list: "allow",
+            lsp: "allow",
+            read: "allow",
+            skill: {
+                "*": "deny",
+                "code*": "allow",
+            },
+        },
+        prompt: queryCodePrompt,
+        temperature: 0.3,
+        tier: "balanced",
+    },
+
+    query_excel: {
+        color: "#208020",
+        description: "Task `query_excel` to handle Excel workbook manipulations or data retrievals",
+        hidden: true,
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            "excel_get*": "allow",
+            "excel_read*": "allow",
+            "excel_validate*": "allow",
+            external_directory: "allow",
+            glob: "allow",
+            list: "allow",
+        },
+        prompt: queryExcelPrompt,
+        temperature: 0.1,
+        tier: "fast",
+    },
+
+    query_git: {
+        color: "#208020",
+        description: "Task `query_git` to manage Git repositories with staging, commits, and branching",
+        hidden: true,
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            external_directory: "allow",
+            "git_git_diff*": "allow",
+            git_git_log: "allow",
+            git_git_show: "allow",
+            git_git_status: "allow",
+            glob: "allow",
+            grep: "allow",
+            list: "allow",
+            read: "allow",
+        },
+        prompt: queryGitPrompt,
+        temperature: 0.1,
+        tier: "fast",
+    },
+
+    query_text: {
+        color: "#208020",
+        description: "Task `query_text` to search, find, locate, summarize, report or review: config file values, md sections, md front-matter, yaml files, json files, templates, assets, resources - NOT for reading entire files, instead use `read` tool to read entire file content",
+        hidden: true,
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            external_directory: "allow",
+            glob: "allow",
+            grep: "allow",
+            list: "allow",
+            lsp: "allow",
+            read: "allow"
+        },
+        prompt: queryTextPrompt,
+        temperature: 0.1,
+        tier: "fast",
+    },
+
+    query_web: {
+        color: "#208020",
+        description: "Task `query_web` to search and read public online web sources: documentation, articles, forums, GitHub, news",
+        hidden: true,
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            "todo*": "allow",
+            "websearch*": "allow",
+            webfetch: "allow",
+        },
+        prompt: queryWebPrompt,
+        temperature: 0.7,
+        tier: "fast",
     },
 
     explore: {
