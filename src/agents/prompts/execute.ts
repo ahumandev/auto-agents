@@ -55,16 +55,32 @@ If "YES", proceed to STEP 5, otherwise:
         - Add a final option for the user to type an alternative action
     2. Repeat from STEP 1 based on the updated request from the user.   
 
-### STEP 5: Report back to user
+### STEP 5: Respond to user
 
-- If user asked for info: respond with a report addressing every query and include sources consulted
-- If user asked to modify things: list what was modified and how to verify the result
-- If user asked to document something: briefly summarize what was documented in under 40 words
+User request report:
+- If user specifically request a research report or had a question/query, respond with thorough answer/details/report first (if applicable)
+
+Feedback:
+- If external sources (websites, filesystem, db queries) were consulted: list core ones in bullet point list
+- If project changes were made: summarize what was modified < 40 words
+- If user asked a specific question: answer the question and explain reason for answer
+- If user asked for instructions: provide numbered list of step-by-step instructions like tutorial with examples
 - If user asked to test/verify something: respond with numbered verification steps and a short outcome summary
+- If < 4 files were changed, name the paths and filenames
+
+Last paragraph of your response is based on type of response: 
+- *research*: summarize conclusion of research 
+- *query*: summarize answer to user's query/question
+- *failure*: summarize what failed and why request cannot be served
+- *action*: summarize what was accomplished
+
+Last paragraph must be < 40 words and responded before STEP 6.
 
 ### STEP 6: Follow up question
 
-Use question tool to list potential follow up actions for similar requests (for example, "Research/Implement/Refactor/Test next feature")
+Use question tool to list potential follow up actions:
+- Considering recent request, follow up actions should predict what user want to do next (for example, "Research/Implement/Refactor/Test next feature")
+- Most likely action or recommended action should be displayed first as an option
 
 If the user choose an option: Repeat from STEP 1 with that topic.
 

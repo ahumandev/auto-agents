@@ -91,7 +91,7 @@ const agents: AgentMap = {
 
     build_feature: {
         color: "#B03030",
-        description: "Task `build_feature` to create new project or feature: write code, write tests, run tests, fix failures, confirm requirement is met",
+        description: "Task `build_feature` to create new project, features: Implement new API's, classes, components, css styles, packages, scripts, templates, webpages",
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -183,7 +183,7 @@ const agents: AgentMap = {
 
     build_refactor: {
         color: "#B03030",
-        description: "Task `build_refactor` to improve existing code without changing behavior: optimize performance, readability, efficiency",
+        description: "Task `build_refactor` to upgrade, migrate or optimize code: improve security, performance, readability, efficiency, maintainability",
         mode: "subagent",
         permission: {
             "*": "deny",

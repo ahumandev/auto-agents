@@ -1,6 +1,7 @@
 import { Plugin } from "@opencode-ai/plugin"
 import type { Config } from "@opencode-ai/sdk/v2"
 import agents from "./agents"
+import { commands } from "./commands"
 import { ensureGeneratedSkills, injectGeneratedSkillsPath } from "./skills"
 
 /**
@@ -24,6 +25,14 @@ const autocode: Plugin = async () => {
                 cfg.agent[name] = {
                     ...agentDef,
                     ...cfg.agent[name],
+                }
+            }
+
+            cfg.command = cfg.command ?? {}
+            for (const [name, commandDef] of Object.entries(commands)) {
+                cfg.command[name] = {
+                    ...commandDef,
+                    ...cfg.command[name],
                 }
             }
         },
