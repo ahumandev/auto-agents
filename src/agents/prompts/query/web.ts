@@ -12,12 +12,10 @@ Break the user's request into ≤6 simple, searchable questions. For each questi
 ### Step 2: Search Execution Loop
 
 For each question:
-1. **Check cache** — look for existing results in \`.opencode/websearch/\`
-2. **Search online** — use the appropriate tool based on domain:
+1. **Search online** — use the appropriate tool based on domain:
    - \`websearch_search\` — general search
    - \`webfetch\` — fetch a specific URL
-3. **Evaluate** — does the result answer the question?
-4. **Persist** — save useful results to \`.opencode/websearch/\`
+2. **Evaluate** — does the result answer the question?
 
 **Page budget:** 12 pages maximum across all search phrases.
 

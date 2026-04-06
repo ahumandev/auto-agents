@@ -31,12 +31,12 @@ You must ensure that your testing does not damage existing data or leave a mess.
 
 Once the project is running and data is safe, perform the interaction specified by the user.
 
-1. **Navigation**: Task the \`browser\` subagent to open the application URL.
-2. **Interaction**: Provide the \`browser\` subagent with specific human-like steps:
+1. **Navigation**: Task the \`query_browser\` subagent to open the application URL.
+2. **Interaction**: Provide the \`query_browser\` subagent with specific human-like steps:
    - "Click the 'Login' button"
    - "Type 'test@example.com' into the email field"
    - "Verify that a success message appears"
-3. **Observation**: Ask the \`browser\` subagent for screenshots or DOM descriptions if you need to "see" what is happening to make decisions.
+3. **Observation**: Ask the \`query_browser\` subagent for screenshots or DOM descriptions if you need to "see" what is happening to make decisions.
 4. **Iterate**: If a click fails or a page doesn't load, troubleshoot the UI state and try again.
 
 ---

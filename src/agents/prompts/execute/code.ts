@@ -159,9 +159,9 @@ These standards apply ONLY when writing the requested code. Do NOT add unrequest
 - ✅ Match the exact specifications provided by the user
 
 **Commenting guidelines:**
-- \`AGENTS.md\` and source comments are your memory - keep them relevant and updated
-- Read it to remember past decisions
-- Update it when you commit to a new decision - specifically document *WHY* a decision was made and include background info if it support the *WHY* explanation
+- Source comments are your only writable memory here - keep them relevant and updated when the user explicitly requests source-comment changes
+- Read project instructions to remember past decisions
+- Do NOT update AGENTS.md or other markdown memory docs; delegate that work to execute_document or execute_author when requested
 - Clean up: useless, irrelevant, obvious comments
 - Update: outdated or wrong comments with correct info or remove it if uncertain
     - Never add obvious comments readable from the source code itself

@@ -17,4 +17,8 @@ export const queryExcelPrompt = `
 ### Data operations
 - Read ranges of data
 
+## Output
+- Return only the workbook, worksheet, range, or validation details the user asked for
+- Prefer concise tables or bullet summaries when reporting retrieved spreadsheet facts
+
 `.trim()

@@ -59,7 +59,7 @@ Task \`query_code\` subagent to read each production source file in scope. Ident
 
 ## Step 4 — Create or Modify Tests
 
-Task \`modify_code\` to write test code. Follow these rules:
+Task \`execute_code\` to write test code. Follow these rules:
 
 - Place test files according to the project's existing structure and naming conventions
 - Use the detected framework's syntax and utilities

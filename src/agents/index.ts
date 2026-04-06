@@ -7,6 +7,8 @@ import { buildGitCommitPrompt } from "./prompts/build/git_commit";
 import { buildPrompt } from "./prompts/build"
 import { buildRefactorPrompt } from "./prompts/build/refactor";
 import { buildResearchPrompt } from "./prompts/build/research";
+import { buildReviewApiPrompt } from "./prompts/build/review_api";
+import { buildReviewUiPrompt } from "./prompts/build/review_ui";
 import { buildTestPrompt} from "./prompts/build/test";
 import { buildTroubleshootPrompt } from "./prompts/build/troubleshoot";
 import { documentConventionsPrompt } from "./prompts/execute/document/conventions"
@@ -43,7 +45,7 @@ type AgentMap = Record<string, AgentConfigWithTier>
 const agents: AgentMap = {
     ask: {
         color: "#40FF40",
-        description: "Generate reports (read-only)",
+        description: "Generate research reports (read-only)",
         mode: "primary",
         permission: {
             "*": "deny",
@@ -68,7 +70,7 @@ const agents: AgentMap = {
 
     build: {
         color: "#FF40FF",
-        description: "Build planned phases",
+        description: "Execute an existing approved plan by delegating its phases",
         hidden: false, // "false" required by Plannotator
         mode: "primary",
         permission: {
@@ -79,7 +81,8 @@ const agents: AgentMap = {
             task: {
                 "*": "deny",
                 "build*": "allow",
-            }
+            },
+            "todo*": "allow",
         },
         prompt: buildPrompt,
         temperature: 0.4,
@@ -125,6 +128,8 @@ const agents: AgentMap = {
             edit: "allow",
             task: {
                 "*": "deny",
+                execute_code: "allow",
+                execute_os: "allow",
                 query_code: "allow",
                 query_text: "allow",
             },
@@ -137,7 +142,7 @@ const agents: AgentMap = {
 
     build_general: {
         color: "#B0B030",
-        description: "Task `build_general` only if no other subagents's description matches the requested task",
+        description: "Fallback to `build_general` when no specialized build agent clearly fits task",
         mode: "subagent",
         permission: {
             "*": "allow",
@@ -149,6 +154,7 @@ const agents: AgentMap = {
                 "build*": "deny",
                 plan: "deny",
             },
+            "todo*": "allow",
         },
         prompt: buildGeneralPrompt,
         tier: "smart",
@@ -166,7 +172,6 @@ const agents: AgentMap = {
                 "*": "deny",
                 query_code: "allow",
                 query_git: "allow",
-                query_md: "allow",
                 query_text: "allow"
             },
             "todo*": "allow",
@@ -190,6 +195,7 @@ const agents: AgentMap = {
             },
             task: {
                 "*": "deny",
+                execute_code: "allow",
                 execute_os: "allow",
                 query_code: "allow",
                 query_git: "allow",
@@ -227,9 +233,9 @@ const agents: AgentMap = {
         permission: {
             "*": "deny",
             doom_loop: "ask",
-            edit: "allow",
             task: {
                 "*": "deny",
+                execute_code: "allow",
                 execute_os: "allow",
                 query_code: "allow",
                 query_git: "allow",
@@ -244,14 +250,14 @@ const agents: AgentMap = {
 
     build_review_ui: {
         color: "#B03030",
-        description: "Task `build_review_ui` to review UI changes: run application, inspect UI, run tests, fix failures, and confirm UI requirements are met",
+        description: "Task `build_review_ui` to review UI changes: run application, inspect UI, run tests, and confirm UI requirements are met",
         mode: "subagent",
         permission: {
             "*": "deny",
             doom_loop: "ask",
-            edit: "allow",
             task: {
                 "*": "deny",
+                execute_code: "allow",
                 execute_os: "allow",
                 query_browser: "allow",
                 query_code: "allow",
@@ -267,7 +273,7 @@ const agents: AgentMap = {
 
     build_test: {
         color: "#B03030",
-        description: "Task `build_test` to increase unit test coverage: discover untested code, write tests, fix failures (tests only, not code)",
+        description: "Task `build_test` to write or fix tests and, when explicitly needed, targeted code/config support for passing verification",
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -279,6 +285,7 @@ const agents: AgentMap = {
             },
             task: {
                 "*": "deny",
+                execute_code: "allow",
                 execute_os: "allow",
                 query_code: "allow",
                 query_git: "allow",
@@ -292,17 +299,17 @@ const agents: AgentMap = {
 
     build_troubleshoot: {
         color: "#B03030",
-        description: "Task `build_troubleshoot` to diagnose and fix problems: reproduce if needed, find root cause, apply fix, verify, repeat until resolved",
+        description: "Task `build_troubleshoot` to orchestrate diagnosis, delegated fixes, and verification until resolved",
         mode: "subagent",
         permission: {
             "*": "deny",
             codesearch: "allow",
             "context7*": "allow",
             doom_loop: "allow",
-            edit: "allow",
             task: {
                 "*": "deny",
-                "os": "allow",
+                execute_code: "allow",
+                "execute_os": "allow",
                 "query*": "allow",
             },
             "todo*": "allow",
@@ -480,7 +487,7 @@ const agents: AgentMap = {
 
     execute_author: {
         color: "#802020",
-        description: "Task `execute_author` to create or update documents, articles, agentic instructions or general Markdown; DO NOT used to edit source code or system config",
+        description: "Task `execute_author` to create or update documents, articles, agentic instructions or general Markdown; It NEVER edit source code or system config",
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -504,7 +511,7 @@ const agents: AgentMap = {
 
     execute_code: {
         color: "#802020",
-        description: "Task `execute_code` to update the codebase with code, scripts, config, templates according to plain precise instructions; NEVER write md files with this agent",
+        description: "Task `execute_code` to update the codebase with code, scripts, config, templates according to plain precise instructions; It NEVER write md files",
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -531,7 +538,7 @@ const agents: AgentMap = {
 
     execute_document: {
         color: "#802080",
-        description: "Task `execute_document` to keep project documentation up to date",
+        description: "Task `execute_document` to maintain agent/project memory docs for agents via document_* specialists",
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -549,15 +556,15 @@ const agents: AgentMap = {
 
     execute_excel: {
         color: "#802020",
-        description: "Task `build_excel` to orchestrate excel workbook manipulations and data validation",
+        description: "Task `execute_excel` to orchestrate excel workbook manipulations and data validation",
         mode: "subagent",
         permission: {
             "*": "deny",
             doom_loop: "ask",
+            "excel_*": "allow",
             external_directory: "ask",
             task: {
                 "*": "deny",
-                "excel_*": "allow",
                 query_excel: "allow",
                 query_text: "allow"
             },
@@ -570,7 +577,7 @@ const agents: AgentMap = {
 
     execute_os: {
         color: "#802020",
-        description: "Task `os` to execute scripts, bash commands, move/rename files/directories or administrate operating system; Not intended for read/write local codebase content, not intended for browser automation, not intended for any online tasks",
+        description: "Task `execute_os` to execute scripts, bash commands, move/rename files/directories or administrate operating system; not for source code editing, browser automation, or online research",
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -600,6 +607,7 @@ const agents: AgentMap = {
             codesearch: "allow",
             doom_loop: "ask",
             plan_exit: "allow",
+            question: "allow",
             read: "allow",
             skill: {
                 "*": "deny",
@@ -681,7 +689,7 @@ const agents: AgentMap = {
 
     query_git: {
         color: "#208020",
-        description: "Task `query_git` to manage Git repositories with staging, commits, and branching",
+        description: "Task `query_git` for read-only git inspection: status, diff, log, show, and reporting",
         hidden: true,
         mode: "subagent",
         permission: {

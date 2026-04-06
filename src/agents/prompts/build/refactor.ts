@@ -84,7 +84,7 @@ If tests pass but the optimization goal was NOT fully achieved → return to Pha
 Identify the root cause:
 
 **Case A — The optimization broke behavior** (a code path was changed unintentionally):
-- Instruct \`modify_code\` to revert or fix the specific change that caused the failure
+- Instruct \`execute_code\` to revert or fix the specific change that caused the failure
 - Provide the exact failing test name, error message, and the relevant code change from Phase 3
 - Do NOT touch test files
 
