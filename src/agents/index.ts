@@ -3,6 +3,13 @@ import { askPrompt } from "./prompts/ask";
 import { buildPrompt } from "./prompts/build"
 import { buildDocumentPrompt } from "./prompts/build/document"
 import { buildExcelPrompt } from "./prompts/build/excel";
+import { buildFeaturePrompt } from "./prompts/build/feature";
+import { buildFormatPrompt } from "./prompts/build/format";
+import { buildGeneralPrompt } from "./prompts/build/general";
+import { buildGitCommitPrompt } from "./prompts/build/git_commit";
+import { buildOptimizePrompt } from "./prompts/build/optimize";
+import { buildTestPrompt} from "./prompts/build/test";
+import { buildTroubleshootPrompt } from "./prompts/build/troubleshoot";
 import { documentConventionsPrompt } from "./prompts/build/document/conventions"
 import { documentDesignPrompt } from "./prompts/build/document/design"
 import { documentInstallPrompt } from "./prompts/build/document/install"
@@ -12,13 +19,13 @@ import { documentSecurityPrompt } from "./prompts/build/document/security"
 import { documentUxPrompt } from "./prompts/build/document/ux"
 import { executePrompt } from "./prompts/execute";
 import { planPrompt } from "./prompts/plan"
-import { queryBrowserPrompt } from "@/agents/prompts/query/browser";
-import { queryCodePrompt } from "@/agents/prompts/query/code";
-import { queryExcelPrompt } from "@/agents/prompts/query/excel";
-import { queryGitPrompt } from "@/agents/prompts/query/git";
-import { queryTextPrompt } from "@/agents/prompts/query/text";
-import { queryWebPrompt } from "@/agents/prompts/query/web";
-import {buildFeaturePrompt} from "@/agents/prompts/build/feature";
+import { queryBrowserPrompt } from "./prompts/query/browser";
+import { queryCodePrompt } from "./prompts/query/code";
+import { queryExcelPrompt } from "./prompts/query/excel";
+import { queryGitPrompt } from "./prompts/query/git";
+import { queryTextPrompt } from "./prompts/query/text";
+import { queryWebPrompt } from "./prompts/query/web";
+import { osPrompt } from "./prompts/os";
 
 type ModelTier = "fast" | "balanced" | "smart"
 type AgentConfigWithTier = AgentConfig & { tier?: ModelTier }
@@ -30,13 +37,14 @@ type AgentMap = Record<string, AgentConfigWithTier>
  * blue = orchestrators
  */
 
-export const agents: AgentMap = {
+const agents: AgentMap = {
     ask: {
         color: "#40FF40",
         description: "Generate reports (read-only)",
         mode: "primary",
         permission: {
             "*": "deny",
+            codesearch: "allow",
             question: "allow",
             read: "allow",
             skill: {
@@ -98,10 +106,12 @@ export const agents: AgentMap = {
         permission: {
             "*": "deny",
             doom_loop: "ask",
+            external_directory: "ask",
             task: {
                 "*": "deny",
                 "excel_*": "allow",
                 query_excel: "allow",
+                query_text: "allow"
             },
             "todo*": "allow",
         },
@@ -116,20 +126,207 @@ export const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
+            "codesearch": "allow",
+            "context7*": "allow",
             doom_loop: "ask",
+            edit: "allow",
+            external_directory: "ask",
+            skill: {
+                "*": "deny",
+                "code*": "allow",
+            },
             task: {
                 "*": "deny",
-                modify_code: "allow",
-                modify_os: "allow",
-                query_code: "allow",
-                query_git: "allow",
                 build_test: "allow",
                 build_troubleshoot: "allow",
+                os: "allow",
+                query_code: "allow",
+                query_git: "allow",
+                query_text: "allow"
             },
             "todo*": "allow",
         },
         prompt: buildFeaturePrompt,
         temperature: 0.3,
+        tier: "balanced",
+    },
+
+    build_format: {
+        color: "#B03030",
+        description: "Task `build_format` to format text files",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            edit: "allow",
+            task: {
+                "*": "deny",
+                query_code: "allow",
+                query_text: "allow",
+            },
+            "todo*": "allow",
+        },
+        prompt: buildFormatPrompt,
+        temperature: 0.3,
+        tier: "balanced",
+    },
+
+    build_general: {
+        color: "#B0B030",
+        description: "Task `build_general` only if no other subagents's description matches the requested task",
+        mode: "subagent",
+        permission: {
+            "*": "allow",
+            doom_loop: "ask",
+            external_directory: "ask",
+            task: {
+                "*": "allow",
+                ask: "deny",
+                "build*": "deny",
+                plan: "deny",
+            },
+        },
+        prompt: buildGeneralPrompt,
+        tier: "balanced",
+    },
+
+    build_git_commit: {
+        color: "#B03030",
+        description: "Task `build_git_commit` only if reviewing changes and creating professional git commits",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            "git_*": "allow",
+            task: {
+                "*": "deny",
+                query_code: "allow",
+                query_git: "allow",
+                query_md: "allow",
+                query_text: "allow"
+            },
+            "todo*": "allow",
+        },
+        prompt: buildGitCommitPrompt,
+        temperature: 0.1,
+        tier: "balanced",
+    },
+
+    build_optimize: {
+        color: "#B03030",
+        description: "Task `build_optimize` to improve existing code without changing behavior: optimize performance, readability, efficiency",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            edit: "allow",
+            external_directory: "ask",
+            skill: {
+                "*": "deny",
+                "code*": "allow",
+            },
+            task: {
+                "*": "deny",
+                os: "allow",
+                query_code: "allow",
+                query_git: "allow",
+            },
+            "todo*": "allow",
+        },
+        prompt: buildOptimizePrompt,
+        temperature: 0.3,
+        tier: "balanced",
+    },
+
+    build_review_api: {
+        color: "#B03030",
+        description: "Task `build_review_api` to review API changes: check endpoints, run tests, fix failures, and confirm API requirements are met",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            edit: "allow",
+            task: {
+                "*": "deny",
+                os: "allow",
+                query_code: "allow",
+                query_git: "allow",
+                query_text: "allow",
+            },
+            "todo*": "allow",
+        },
+        prompt: buildReviewApiPrompt,
+        temperature: 0.3,
+        tier: "balanced",
+    },
+
+    build_review_ui: {
+        color: "#B03030",
+        description: "Task `build_review_ui` to review UI changes: run application, inspect UI, run tests, fix failures, and confirm UI requirements are met",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            edit: "allow",
+            task: {
+                "*": "deny",
+                os: "allow",
+                query_browser: "allow",
+                query_code: "allow",
+                query_git: "allow",
+                query_text: "allow",
+            },
+            "todo*": "allow",
+        },
+        prompt: buildReviewUiPrompt,
+        temperature: 0.3,
+        tier: "balanced",
+    },
+
+    build_test: {
+        color: "#B03030",
+        description: "Task `build_test` to increase unit test coverage: discover untested code, write tests, fix failures (tests only, not code)",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            edit: "allow",
+            skill: {
+                "*": "deny",
+                "test*": "allow"
+            },
+            task: {
+                "*": "deny",
+                os: "allow",
+                query_code: "allow",
+                query_git: "allow",
+            },
+            "todo*": "allow",
+        },
+        prompt: buildTestPrompt,
+        temperature: 0.3,
+        tier: "balanced",
+    },
+
+    build_troubleshoot: {
+        color: "#B03030",
+        description: "Task `build_troubleshoot` to diagnose and fix problems: reproduce if needed, find root cause, apply fix, verify, repeat until resolved",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            codesearch: "allow",
+            "context7*": "allow",
+            doom_loop: "allow",
+            edit: "allow",
+            task: {
+                "*": "deny",
+                "os": "allow",
+                "query*": "allow",
+            },
+            "todo*": "allow",
+        },
+        prompt: buildTroubleshootPrompt,
+        temperature: 0.5,
         tier: "balanced",
     },
 
@@ -140,7 +337,6 @@ export const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            codesearch: "allow",
             doom_loop: "allow",
             edit: "allow",
             glob: "allow",
@@ -161,7 +357,6 @@ export const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            codesearch: "allow",
             doom_loop: "allow",
             edit: "allow",
             glob: "allow",
@@ -182,7 +377,6 @@ export const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            codesearch: "allow",
             doom_loop: "allow",
             edit: "allow",
             glob: "allow",
@@ -202,7 +396,6 @@ export const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            codesearch: "allow",
             doom_loop: "allow",
             edit: "allow",
             glob: "allow",
@@ -223,7 +416,6 @@ export const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            codesearch: "allow",
             doom_loop: "allow",
             edit: "allow",
             glob: "allow",
@@ -243,7 +435,6 @@ export const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            codesearch: "allow",
             doom_loop: "allow",
             edit: "allow",
             glob: "allow",
@@ -264,7 +455,6 @@ export const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            codesearch: "allow",
             doom_loop: "allow",
             edit: "allow",
             glob: "allow",
@@ -308,12 +498,36 @@ export const agents: AgentMap = {
         tier: "smart",
     },
 
+    os: {
+        color: "#802020",
+        description: "Task `os` to execute scripts, bash commands, move/rename files/directories or administrate operating system; Not intended for read/write local codebase content, not intended for browser automation, not intended for any online tasks",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            bash: "allow",
+            doom_loop: "ask",
+            edit: "allow",
+            external_directory: "allow",
+            "filesystem*": "allow",
+            glob: "allow",
+            grep: "allow",
+            list: "allow",
+            "pty*": "allow",
+            read: "allow",
+            "todo*": "allow",
+        },
+        prompt: osPrompt,
+        temperature: 0.1,
+        tier: "balanced", // Not "fast", because it needs to make dangerous decisions
+    },
+
     plan: {
         color: "#40FFFF",
         description: "Interactive Planning - Interview user, research problem, and create implementation plans",
         mode: "primary",
         permission: {
             "*": "deny",
+            codesearch: "allow",
             doom_loop: "ask",
             plan_exit: "allow",
             read: "allow",
@@ -461,3 +675,4 @@ export const agents: AgentMap = {
         disable: true,
     },
 }
+export default agents
