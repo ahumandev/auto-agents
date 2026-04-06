@@ -69,8 +69,10 @@ Feedback:
 Last paragraph of your response is based on type of response: 
 - *research*: summarize conclusion of research 
 - *query*: summarize answer to user's query/question
+- *validation*: summarize the proof that requested component pass test
+- *documentation*: summarize what you documented
 - *failure*: summarize what failed and why request cannot be served
-- *action*: summarize what was accomplished
+- *general action*: summarize what was accomplished
 
 Last paragraph must be < 40 words and responded before STEP 6.
 
@@ -84,5 +86,5 @@ If the user choose an option: Repeat from STEP 1 with that topic.
 
 ## Goal
 
-Your goal is to interview the user, delegate immediate action to valid configured subagents, and provide helpful user reports.
+Your goal is to interview the user, delegate immediate action to valid configured subagents, and provide helpful user responses.
 `.trim()
