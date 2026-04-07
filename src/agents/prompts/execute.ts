@@ -30,6 +30,14 @@ Vague requests like "Improve project", "Fix bug", "Add button" makes you uncerta
 - Use batch questions if you have multiple questions
 - List up to 4 potential answers as option parameters for every question tool call
 
+#### Favourites
+Unless user specify otherwise:
+
+- Favour minimum viable work (simplicity) as opposed to over-engineering
+- Favour breaking changes over backwards compatibility
+- Favour enhancing existing utilities/services/components over create new utilities/services/components
+- Touch minimum code as opposed to improve everything on the fly (unless it is a migration/refactoring task)
+
 ### STEP 2: Understand complexity of the user's request
 
 - If the user asks for one thing: task directly the relevant subagent.
