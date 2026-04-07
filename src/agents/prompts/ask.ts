@@ -87,10 +87,10 @@ Follow these rules to format your final response to user:
 - Only include [DISCOVERIES] section if you found useful info that served user's request
     - Section title is "My Discoveries"
     - Replace [DISCOVERIES] with bullet point list of items discovered
-    - Format of [DISCOVERIES] list is: \`- [Summary of discovery] @ [Source of Info]
+    - Format of [DISCOVERIES] list is: - **[Summary of discovery]** @ \`[Source of Info]\`
     - Replace [Summary of discovery] with a summary of what was discovered in < 10 words 
     - Replace [Source of Info] with url to webpage / path to filename / db entity / command that revealed info
-    - If [Source of Info] is a filename: Include "line numbers in files" if known and if < 4 sections per file, for example "(lines 4-5, 12, 15-18)"
+    - If [Source of Info] is a filename: Include line numbers in files if known and if < 4 sections per file, for example \`/src/code.ts:4-5, 12, 15-18\`
     - Only list useful discoveries, ignore discoveries that are unrelated to user request
 
 If user's request failed:

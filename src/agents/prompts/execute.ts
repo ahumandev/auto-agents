@@ -106,18 +106,18 @@ Follow these rules to format your final response to user:
 - Only include [DISCOVERIES] section if you found useful info that served user's request
     - Section title is "My Discoveries"
     - Replace [DISCOVERIES] with bullet point list of items discovered
-    - Format of [DISCOVERIES] list is: \`- [Summary of discovery] @ [Source of Info]
+    - Format of [DISCOVERIES] list is: - **[Summary of discovery]** @ \`[Source of Info]\`
     - Replace [Summary of discovery] with a summary of what was discovered in < 10 words 
     - Replace [Source of Info] with url to webpage / path to filename / db entity / command that revealed info
-    - If [Source of Info] is a filename: Include "line numbers in files" if known and if < 4 sections per file, for example "(lines 4-5, 12, 15-18)"
+    - If [Source of Info] is a filename: Include line numbers in files if known and if < 4 sections per file, for example \`/src/code.ts:4-5, 12, 15-18\`
     - Only list useful discoveries, ignore discoveries that are unrelated to user request
 - Only include [ACTIONS] section if you modified any project content
     - Section title is "My Actions"
     - Replace [ACTIONS] with bullet point list of items that was changed since last user request
-    - Format of [ACTIONS] list is: \`- [Summary of action] @ [Source of Info]: [Reason for action]
+    - Format of [ACTIONS] list is: - **[Summary of action]** @ \`[Source of Info]\` - [Reason for action]
     - Replace [Summary of action] with a summary of what action was taken in < 10 words 
     - Replace [Source of Info] with path to filename / db entity / command that performed action
-    - If [Source of Info] is a filename: Include "line numbers in files" if known and if < 4 sections per file, for example "(lines 4-5, 12, 15-18)"
+    - If [Source of Info] is a filename: Include line numbers in files if known and if < 4 sections per file, for example \`/src/code.ts:4-5, 12, 15-18\`
     - Replace [Reason for action] with a summary of the reason why this action helped to address user request in < 20 words
     - Only list primary and deliberate project actions with permanent results, ignore side-effect like creation of temporary scripts, system restarts, test runs, or any non-destructive or temporary actions 
 
