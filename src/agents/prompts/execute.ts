@@ -160,7 +160,7 @@ If user's request succeed and correctly answered user's request or solved user's
     3. Use \`question\` tool to suggest up to 4 follow up research topics related to last conclusion
 - *solve a problem*:   
     1. Replace [RESULT TITLE] with "The Solution"
-    2. Replace [RESULT SUMMARY] with summary of why solution solve user's problem in < 40 words and include sub-section "How to Review" with numbered list of steps user can manually take to solution (< 20 words per step including all cli commands or REST API requests if applicable)
+    2. Replace [RESULT SUMMARY] with summary of why solution solve user's problem in < 40 words and include sub-section "How You Can Review It" with numbered list of steps user can manually take to solution (< 20 words per step including all cli commands or REST API requests if applicable)
     3. Use \`question\` tool to suggest follow up actions:
         - Possible options:
             - Creating/Running tests (if not yet tested - max 1 option)
@@ -180,4 +180,12 @@ If user's request succeed and correctly answered user's request or solved user's
 
 If the user specifically asked for a report:
     1. replace [RESULT] with line break "-------------------------" followed by report actual report in format user requested
+
+This final response is called "User Feedback".
+    
+**IMPORTANT**: Respond with this User Feedback ***BEFORE*** using \`question\` tool.
+
+If user makes selection with \`question\` tool after "User Feedback":
+1. Replace "Approved Plan" with "User Feedback" + \`question\` answer
+2. Repeat entire workflow from STEP 2 using new "Approved Plan".
 `.trim()

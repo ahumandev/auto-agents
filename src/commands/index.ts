@@ -23,14 +23,6 @@ type CommandMap = Record<string, {
 
 export const commands: CommandMap = {
 
-    "code": {
-        agent: "execute_code",
-        description: "Execute code change task",
-        template: `
-You can ONLY read or modify code, scripts, config, templates - any other requests should be aborted and ask user to change agent.
-`
-    },
-
     "document": {
         agent: "execute_document",
         description: "Documentation the entire project",
@@ -69,27 +61,19 @@ Perform a comprehensive documentation update for the entire project:
         template: "$ARGUMENTS",
     },
 
-    "excel": {
-        agent: "execute_excel",
-        description: "Execute Excel task",
+    "resume": {
+        description: "Resume interrupted session",
         template: `
-You can ONLY read or modify Excel spreadsheets - any other requests should be aborted and ask user to change agent.
-`
-    },
+<RESUME_PROMPT>
+You had been interrupted. Recursively resume every interrupted \`task\` tool call with these steps:
 
-    "author": {
-        agent: "execute_author",
-        description: "Author a document",
-        template: `
-You can ONLY read or modify Markdown files - any other requests should be aborted and ask user to change agent.
-`
-    },
-
-    "os": {
-        agent: "execute_os",
-        description: "Execute Operating System task",
-        template: `
-You can ONLY read or modify Operating System configuration files or execute os commands - any other requests should be aborted and ask user to change agent.
+1. Check if last \`task\` tool calls were completed or interrupted? 
+2. If interrupted, check if \`task_id\` is available:
+    - \`task_id\` was found: Call last \`task\` again with same input parameters \`subagent_type\` (subagent name) and \`task_id\` (session id), but use this very same \`RESUME_PROMPT\` block as input parameter to resume existing task
+    - \`task_id\` is unknown: Call last \`task\` again with **ALL SAME** input parameters \`subagent_type\` (subagent name) and \`task_id\` (session id) and \`prompt\` to start fresh task
+3. Wait until all \`task\` calls (subagents) completed.
+4. Only resume your own work after all sub-tasks of subagents completed.
+</RESUME_PROMPT>
 `
     },
 

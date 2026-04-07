@@ -31,6 +31,7 @@ import { queryExcelPrompt } from "./prompts/query/excel";
 import { queryGitPrompt } from "./prompts/query/git";
 import { queryTextPrompt } from "./prompts/query/text";
 import { queryWebPrompt } from "./prompts/query/web";
+import {executeWorktreePrompt} from "@/agents/prompts/execute/worktree";
 
 type ModelTier = "fast" | "balanced" | "smart"
 type AgentConfigWithTier = AgentConfig & { tier?: ModelTier }
@@ -38,7 +39,7 @@ type AgentMap = Record<string, AgentConfigWithTier>
 
 const agents: AgentMap = {
     ask: {
-        color: "#FFFF40",
+        color: "#40FF40",
         description: "Generate research reports (read-only)",
         mode: "primary",
         permission: {
@@ -63,7 +64,7 @@ const agents: AgentMap = {
     // build agents are smart agents that translate user problems to actionable processes or tasks (does no work itself)
 
     build: {
-        color: "#4080FF",
+        color: "#FFFF40",
         description: "Execute an existing approved plan by delegating its phases",
         hidden: false, // "false" required by Plannotator
         mode: "primary",
@@ -84,8 +85,9 @@ const agents: AgentMap = {
     },
 
     build_feature: {
-        color: "#204080",
+        color: "#808020",
         description: "Task `build_feature` to create new project, features: Implement new API's, classes, components, css styles, packages, scripts, templates, webpages",
+        hidden: true,
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -113,8 +115,9 @@ const agents: AgentMap = {
     },
 
     build_format: {
-        color: "#204080",
+        color: "#808020",
         description: "Task `build_format` to format text files",
+        hidden: true,
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -135,8 +138,9 @@ const agents: AgentMap = {
     },
 
     build_general: {
-        color: "#204080",
+        color: "#808020",
         description: "Fallback to `build_general` when no specialized build agent clearly fits task",
+        hidden: true,
         mode: "subagent",
         permission: {
             "*": "allow",
@@ -155,8 +159,9 @@ const agents: AgentMap = {
     },
 
     build_git_commit: {
-        color: "#204080",
+        color: "#808020",
         description: "Task `build_git_commit` only if reviewing changes and creating professional git commits",
+        hidden: true,
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -176,8 +181,9 @@ const agents: AgentMap = {
     },
 
     build_refactor: {
-        color: "#204080",
+        color: "#808020",
         description: "Task `build_refactor` to upgrade, migrate or optimize code: improve security, performance, readability, efficiency, maintainability",
+        hidden: true,
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -202,8 +208,9 @@ const agents: AgentMap = {
     },
 
     build_research: {
-        color: "#204080",
+        color: "#808020",
         description: "Task `build_research` to query data, create research reports, find info user requested",
+        hidden: true,
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -221,8 +228,9 @@ const agents: AgentMap = {
     },
 
     build_review_api: {
-        color: "#204080",
+        color: "#808020",
         description: "Task `build_review_api` to review API changes: check endpoints, run tests, fix failures, and confirm API requirements are met",
+        hidden: true,
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -243,8 +251,9 @@ const agents: AgentMap = {
     },
 
     build_review_ui: {
-        color: "#204080",
+        color: "#808020",
         description: "Task `build_review_ui` to review UI changes: run application, inspect UI, run tests, and confirm UI requirements are met",
+        hidden: true,
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -266,8 +275,9 @@ const agents: AgentMap = {
     },
 
     build_test: {
-        color: "#204080",
+        color: "#808020",
         description: "Task `build_test` to write or fix tests and, when explicitly needed, targeted code/config support for passing verification",
+        hidden: true,
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -292,14 +302,15 @@ const agents: AgentMap = {
     },
 
     build_troubleshoot: {
-        color: "#204080",
+        color: "#808020",
         description: "Task `build_troubleshoot` to orchestrate diagnosis, delegated fixes, and verification until resolved",
+        hidden: true,
         mode: "subagent",
         permission: {
             "*": "deny",
             codesearch: "allow",
             "context7*": "allow",
-            doom_loop: "allow",
+            doom_loop: "ask",
             task: {
                 "*": "deny",
                 execute_code: "allow",
@@ -320,7 +331,7 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "allow",
+            doom_loop: "deny",
             edit: "allow",
             glob: "allow",
             grep: "allow",
@@ -340,7 +351,7 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "allow",
+            doom_loop: "deny",
             edit: "allow",
             glob: "allow",
             grep: "allow",
@@ -360,7 +371,7 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "allow",
+            doom_loop: "deny",
             edit: "allow",
             glob: "allow",
             grep: "allow",
@@ -379,7 +390,7 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "allow",
+            doom_loop: "deny",
             edit: "allow",
             glob: "allow",
             grep: "allow",
@@ -399,7 +410,7 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "allow",
+            doom_loop: "deny",
             edit: "allow",
             glob: "allow",
             grep: "allow",
@@ -418,7 +429,7 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "allow",
+            doom_loop: "deny",
             edit: "allow",
             glob: "allow",
             grep: "allow",
@@ -438,7 +449,7 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "allow",
+            doom_loop: "deny",
             edit: "allow",
             glob: "allow",
             grep: "allow",
@@ -484,9 +495,9 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "ask",
+            doom_loop: "deny",
             edit: "allow",
-            external_directory: "ask",
+            //external_directory: "ask", // Questions does not propagate from sub-sub-agents!
             glob: "allow",
             grep: "allow",
             list: "allow",
@@ -510,9 +521,9 @@ const agents: AgentMap = {
             "*": "deny",
             "codesearch": "allow",
             "context7*": "allow",
-            doom_loop: "ask",
+            doom_loop: "deny",
             edit: "allow",
-            external_directory: "ask",
+            //external_directory: "ask",
             glob: "allow",
             grep: "allow",
             list: "allow",
@@ -535,7 +546,7 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "allow",
+            doom_loop: "deny",
             task: {
                 "*": "deny",
                 "document_*": "allow"
@@ -553,9 +564,9 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "ask",
+            doom_loop: "deny",
             "excel_*": "allow",
-            external_directory: "ask",
+            //external_directory: "ask",
             task: {
                 "*": "deny",
                 query_excel: "allow",
@@ -575,7 +586,7 @@ const agents: AgentMap = {
         permission: {
             "*": "deny",
             bash: "allow",
-            doom_loop: "ask",
+            doom_loop: "deny",
             edit: "allow",
             external_directory: "allow",
             "filesystem*": "allow",
@@ -591,8 +602,22 @@ const agents: AgentMap = {
         tier: "balanced", // Not "fast", because it needs to make dangerous decisions
     },
 
+    execute_worktree: {
+        color: "#802020",
+        description: "Task `execute_worktree` to create, merge or dismiss worktrees",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            "filesystem*": "allow",
+            "git_*": "allow",
+        },
+        prompt: executeWorktreePrompt,
+        temperature: 0.1,
+        tier: "balanced",
+    },
+
     plan: {
-        color: "#40FF40",
+        color: "#404FFF",
         description: "Interactive Planning - Interview user, research problem, and create implementation plans",
         mode: "primary",
         permission: {
@@ -627,7 +652,7 @@ const agents: AgentMap = {
         permission: {
             '*': "deny",
             "chrome*": "allow",
-            "doom_loop": "ask",
+            "doom_loop": "deny",
             "todo*": "allow"
         },
         prompt: queryBrowserPrompt,
@@ -643,7 +668,7 @@ const agents: AgentMap = {
             "*": "deny",
             codesearch: "allow",
             "context7*": "allow",
-            doom_loop: "ask",
+            doom_loop: "deny",
             external_directory: "allow",
             glob: "allow",
             grep: "allow",
@@ -667,7 +692,7 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "ask",
+            doom_loop: "deny",
             "excel_get*": "allow",
             "excel_read*": "allow",
             "excel_validate*": "allow",
@@ -687,7 +712,7 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "ask",
+            doom_loop: "deny",
             external_directory: "allow",
             "git_git_diff*": "allow",
             git_git_log: "allow",
@@ -710,7 +735,7 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "ask",
+            doom_loop: "deny",
             external_directory: "allow",
             glob: "allow",
             grep: "allow",
@@ -730,7 +755,7 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "ask",
+            doom_loop: "deny",
             "todo*": "allow",
             "websearch*": "allow",
             webfetch: "allow",
