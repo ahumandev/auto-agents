@@ -236,4 +236,5 @@ Respond to user this USER REPORT.
 - Follow ERROR HANDLING INSTRUCTIONS to deal with failures/errors/obstacles in plan or if you review and discover final result did not meet user requirement.
 - Only dismiss a worktree after all tasks are completed successfully.
 - Always try to handle failures yourself before asking user for help.
+- Always notify user about any failures or when you deviate from original plan.
 `
