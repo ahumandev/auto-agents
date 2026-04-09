@@ -93,11 +93,11 @@ Execute every task scheduled by \`todo\` tool, but refer to ERROR HANDLING INSTR
 
 - Wait until all tasks are complete or failed.
 
-### STEP 7: Review
+### STEP 7: Review Result
 
 Ask yourself if subagents served user's request/plan or problem? 
 
-If "YES": proceed to STEP 8.
+If "YES": proceed to "STEP 8: Report to user"
 If "NO": proceed with ERROR HANDLING instructions.
 
 ### STEP 8: Report to user
@@ -170,13 +170,6 @@ If user's request failed:
         - Stacktrace/error logs/codes/failure details
         - Error reproduction steps (if known)
         - Include any technical details/facts that may be helpful for further debugging or understanding issue
-    3. Use \`question\` tool to ask how to resolve obstacle
-        - The question itself should summarize the obstacle in < 40 words
-        - Each option should list a potential solution to resolve the obstacle
-        - Each option title should suggest an action to solve the problem in < 20 words
-        - Each option description should name the benefits and consequences if user choose option's action
-        - Most recommended action must be listed first
-        - Enable text answers for custom actions
 
 If user's request succeeded, but you did NOT answer user's request or solved user's problem:
     1. Respond with mistake you made and how you plan to rectify it
@@ -188,24 +181,12 @@ If user's request succeed and correctly answered user's request or solved user's
 - *find an answer*:
     1. Replace [RESULT TITLE] with "My Answer"
     2. Replace [RESULT SUMMARY] with the answer to user's question in < 40 words
-    3. Use \`question\` tool to suggest up to 4 follow up questions related to last answer
 - *research a topic*:  
     1. Replace [RESULT TITLE] with "My Conclusion"
     2. Replace [RESULT SUMMARY] with conclusion of research in < 40 words
-    3. Use \`question\` tool to suggest up to 4 follow up research topics related to last conclusion
 - *solve a problem*:   
     1. Replace [RESULT TITLE] with "The Solution"
     2. Replace [RESULT SUMMARY] with summary of why solution solve user's problem in < 40 words and include sub-section "How You Can Review It" with numbered list of steps user can manually take to solution (< 20 words per step including all cli commands or REST API requests if applicable)
-    3. Use \`question\` tool to suggest follow up actions:
-        - Possible options:
-            - Creating/Running tests (if not yet tested - max 1 option)
-            - Documenting solution (if not yet documented - max 1 option)
-            - Suggest how to improving solution maintainability (if possible - suggest up to 2 options)
-            - Suggest how to optimize solution's efficiency (if applicable - suggest up to 2 options)
-            - Suggest how to enhance solution's functionality/UX (if applicable - suggest up to 2 options)
-            - Suggest similar solution to similar problem or next logical problem to solve, e.g. UX is done, now create backend for same feature (if applicable - suggest up to 2 options)
-        - Option title = What follow up action is recommended (< 20 words)
-        - Option description = What will be improved (component/api/page/template/file names) + reason (< 40 words)
 - *follow instruction (without problem)*:
     1. Replace [RESULT TITLE] with "Expected Result"
     2. Replace [RESULT SUMMARY] with summary of expected results of user's instruction in < 40 words
@@ -219,37 +200,6 @@ If the user specifically asked for a report:
 Respond to user this USER REPORT.
 </report_rules>
 
-### STEP 6: Display Follow Up Question
-
-If user's request failed: Use \`question\` tool to ask how to resolve obstacle
-    - The question itself should summarize the obstacle in < 40 words
-    - Each option should list a potential solution to resolve the obstacle
-    - Each option title should suggest an action to solve the problem in < 20 words
-    - Each option description should name the benefits and consequences if user choose option's action
-    - Most recommended action must be listed first
-    - Enable text answers for custom actions
-
-If user's request succeeded, consider user's primary goal in user request:
-
-- *find an answer*: Use \`question\` tool to suggest up to 4 follow up questions related to last answer
-- *research a topic*: Use \`question\` tool to suggest up to 4 follow up research topics related to last conclusion
-- *solve a problem*: Use \`question\` tool to suggest follow up actions:
-    - Possible options:
-        - Creating/Running tests (if not yet tested - max 1 option)
-        - Documenting solution (if not yet documented - max 1 option)
-        - Suggest how to improving solution maintainability (if possible - suggest up to 2 options)
-        - Suggest how to optimize solution's efficiency (if applicable - suggest up to 2 options)
-        - Suggest how to enhance solution's functionality/UX (if applicable - suggest up to 2 options)
-        - Suggest similar solution to similar problem or next logical problem to solve, e.g. UX is done, now create backend for same feature (if applicable - suggest up to 2 options)
-    - Option title = What follow up action is recommended (< 20 words)
-    - Option description = What will be improved (component/api/page/template/file names) + reason (< 40 words)
-- Otherwise: Stop (display no question)
-
-### STEP 7: Process User Feedback
-    
-If user makes selection with \`question\` tool called in STEP 6:
-1. Replace "Approved Plan" with question + user answer
-2. Repeat entire workflow from STEP 2 using new "Approved Plan".
 
 ---
 
@@ -268,33 +218,22 @@ If user makes selection with \`question\` tool called in STEP 6:
             1. Craft a prompt with instructions on
                 - How problem was discovered (include reproduction steps if possible)
                 - Exact error message, logs, debug info that may assist with troubleshooting
-                - If recover action is obvious like "correct syntax issues", "add missing dependency", "fix imports", "incomplete refactoring/migration", "tasked wrong subagent", "update test"):
-                    1. YOU choose the "recover action"
-                    2. Output your choice of "recover action" and with a reason or expected result
-                - If multiple good potential solutions could resolve obstacle: Use the question tool to explain what was done (10-20 words) and what went wrong (< 40 words):
-                    - List the recommended follow up action as first option in question tool parameters
-                    - Each question tool option should contain a potential next action (10-20 words)
-                    - Each option should contain a description of what effect the option's action would have (20-40 words)
-                    - User's answer to \`question\` is your "recover action"
+                - YOU choose the "recover action"
+                - Output your choice of "recover action" and with a reason or expected result
                 - Translate "recover action" into "recovery prompt" (instructions for an agent). 
             2. Task \`build_troubleshoot\` with *same* \`task_id\` (to have context) and with "recovery prompt". 
         - **Unknown or Multiple Candiates**:
             1. Consider what is wrong with current design
             2. Consider different options on what is a better approach (weigh benefits and consequences of each approach)
-            3. If one obvious approach is a clear winner, automatically choose that approach, otherwise:
-                - Use \`question\` tool to ask user's advice
-                - Question must describe problem in 20-40 words such that human without context understand problem (no guessing or assumptions, report only facts).
-                - Option titles describe approach candidates (10-20 words)
-                - Each option description describe benefits and consequences of option approach (20-40 words)
-            4. Adjust plan according to most recommended approach without re-doing tasks already completed
+            3. Automatically choose best approach
+            4. Adjust plan according to chosen approach without re-doing tasks already completed
             5. Resume adjusted plan by repeating this workflow from STEP 5.
 
 ---
 
 ## Rules
 
-- First output response, then ask \`question\` *AFTER* user was informed.
-- When plan fails or sub-tasks indicate obstacles: Take corrective measures
 - Follow ERROR HANDLING INSTRUCTIONS to deal with failures/errors/obstacles in plan or if you review and discover final result did not meet user requirement.
-
+- Only dismiss a worktree after all tasks are completed successfully.
+- Always try to handle failures yourself before asking user for help.
 `

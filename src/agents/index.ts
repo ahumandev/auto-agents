@@ -9,7 +9,7 @@ import { buildRefactorPrompt } from "./prompts/build/refactor";
 import { buildResearchPrompt } from "./prompts/build/research";
 import { buildReviewApiPrompt } from "./prompts/build/review_api";
 import { buildReviewUiPrompt } from "./prompts/build/review_ui";
-import { buildTestPrompt} from "./prompts/build/test";
+import { buildTestPrompt } from "./prompts/build/test";
 import { buildTroubleshootPrompt } from "./prompts/build/troubleshoot";
 import { documentConventionsPrompt } from "./prompts/execute/document/conventions"
 import { documentDesignPrompt } from "./prompts/execute/document/design"
@@ -24,6 +24,7 @@ import { executeDocumentPrompt } from "./prompts/execute/document"
 import { executeExcelPrompt } from "./prompts/execute/excel";
 import { executeOsPrompt } from "./prompts/execute/os";
 import { executePrompt } from "./prompts/execute";
+import { executeScriptPrompt } from "./prompts/execute/script";
 import { planPrompt } from "./prompts/plan"
 import { queryBrowserPrompt } from "./prompts/query/browser";
 import { queryCodePrompt } from "./prompts/query/code";
@@ -31,7 +32,7 @@ import { queryExcelPrompt } from "./prompts/query/excel";
 import { queryGitPrompt } from "./prompts/query/git";
 import { queryTextPrompt } from "./prompts/query/text";
 import { queryWebPrompt } from "./prompts/query/web";
-import {executeWorktreePrompt} from "@/agents/prompts/execute/worktree";
+import { executeWorktreePrompt } from "@/agents/prompts/execute/worktree";
 
 type ModelTier = "fast" | "balanced" | "smart"
 type AgentConfigWithTier = AgentConfig & { tier?: ModelTier }
@@ -65,14 +66,13 @@ const agents: AgentMap = {
 
     build: {
         color: "#FFFF40",
-        description: "Execute an existing approved plan by delegating its phases",
+        description: "Autonomously execute an existing approved plan (rely on AI guidance)",
         hidden: false, // "false" required by Plannotator
         mode: "primary",
         permission: {
             "*": "deny",
             doom_loop: "ask",
             plan_enter: "allow",
-            question: "allow",
             task: {
                 "*": "deny",
                 "build*": "allow",
@@ -126,6 +126,7 @@ const agents: AgentMap = {
             task: {
                 "*": "deny",
                 execute_code: "allow",
+                execute_script: "allow",
                 execute_os: "allow",
                 query_code: "allow",
                 query_text: "allow",
@@ -196,6 +197,7 @@ const agents: AgentMap = {
             task: {
                 "*": "deny",
                 execute_code: "allow",
+                execute_script: "allow",
                 execute_os: "allow",
                 query_code: "allow",
                 query_git: "allow",
@@ -238,6 +240,7 @@ const agents: AgentMap = {
             task: {
                 "*": "deny",
                 execute_code: "allow",
+                execute_script: "allow",
                 execute_os: "allow",
                 query_code: "allow",
                 query_git: "allow",
@@ -261,6 +264,7 @@ const agents: AgentMap = {
             task: {
                 "*": "deny",
                 execute_code: "allow",
+                execute_script: "allow",
                 execute_os: "allow",
                 query_browser: "allow",
                 query_code: "allow",
@@ -290,6 +294,7 @@ const agents: AgentMap = {
             task: {
                 "*": "deny",
                 execute_code: "allow",
+                execute_script: "allow",
                 execute_os: "allow",
                 query_code: "allow",
                 query_git: "allow",
@@ -314,7 +319,8 @@ const agents: AgentMap = {
             task: {
                 "*": "deny",
                 execute_code: "allow",
-                "execute_os": "allow",
+                execute_script: "allow",
+                execute_os: "allow",
                 "query*": "allow",
             },
             "todo*": "allow",
@@ -466,7 +472,7 @@ const agents: AgentMap = {
 
     execute: {
         color: "#FF4040",
-        description: "Execute basic tasks without analysis or planning",
+        description: "Interactively execute basic tasks without analysis or planning (rely on human planning and guidance)",
         hidden: false,
         mode: "primary",
         permission: {
@@ -515,7 +521,7 @@ const agents: AgentMap = {
 
     execute_code: {
         color: "#802020",
-        description: "Task `execute_code` to update the codebase with code, scripts, config, templates according to plain precise instructions; It NEVER write md files",
+        description: "Task `execute_code` to update the codebase with code, project scripts, config, templates according to plain precise instructions; It NEVER write md files",
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -536,7 +542,7 @@ const agents: AgentMap = {
             "todo*": "allow"
         },
         prompt: executeCodePrompt,
-        temperature: 0.1,
+        temperature: 0.3,
         tier: "balanced",
     },
 
@@ -581,7 +587,7 @@ const agents: AgentMap = {
 
     execute_os: {
         color: "#802020",
-        description: "Task `execute_os` to execute scripts, bash commands, move/rename files/directories or administrate operating system; not for source code editing, browser automation, or online research",
+        description: "Task `execute_os` to execute bash commands, *project* scripts, move/rename files/directories or administrate operating system; not for source code editing, browser automation, or online research",
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -599,7 +605,31 @@ const agents: AgentMap = {
         },
         prompt: executeOsPrompt,
         temperature: 0.1,
-        tier: "balanced", // Not "fast", because it needs to make dangerous decisions
+        tier: "balanced",
+    },
+
+    execute_script: {
+        color: "#802020",
+        description: "Task `execute_script` serve repetitive actions, media/data conversions, content generations via *temporary* helper scripts like 'for each X file in Y do Z' or 'convert all A files to B using C' or 'generate 10MB of X using given template'; NOT intended to maintain project startup/test/deployment scripts",
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            bash: "allow",
+            doom_loop: "deny",
+            edit: "allow",
+            external_directory: "allow",
+            "filesystem*": "allow",
+            glob: "allow",
+            grep: "allow",
+            list: "allow",
+            "pty*": "allow",
+            read: "allow",
+            "todo*": "allow",
+            webfetch: "allow",
+        },
+        prompt: executeScriptPrompt,
+        temperature: 0.3,
+        tier: "balanced",
     },
 
     execute_worktree: {

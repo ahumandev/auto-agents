@@ -39,10 +39,11 @@ Unless user specify otherwise:
 - Touch minimum code as opposed to improve everything on the fly (unless it is a migration/refactoring task)
 
 #### Rules:
-- **ALWAYS use the \`question\` tool** for all user interactions
+- **ALWAYS use \`question\` tool** for all user interactions
 - **Batch multiple questions** in one tool call when possible
 - **Keep asking** until you fully understand the problem
 - **Do NOT guess** - if unclear, ask more questions
+- Continued research (if user ask for more info or explain topic) - \`task\` previous subagent that may have context of required info (input *same* \`task_id\` to resume existing session)
 
 ### STEP 2: Identify workflows
 

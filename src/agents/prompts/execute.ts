@@ -58,14 +58,14 @@ Unless user specify otherwise:
 
 ### STEP 4: Review Result
 
-Ask yourself if the subagents served the user's request/plan or problem? 
+Ask yourself if subagents served user's request/plan or problem? 
 
-If "YES": proceed to STEP 5.
+If "YES": proceed to "STEP 5: Report to user"
 If "NO": proceed with ERROR HANDLING instructions.
 
 ### STEP 5: Report to user
 
-**IMPORANT**: User instructions superceed \`report_rules\`. If user request specific response format, follow those instructions instead then stop.
+**IMPORTANT**: User instructions supersede \`report_rules\`. If user request specific response format, follow those instructions instead then stop.
 
 By default follow these \`report_rules\` to render and respond the USER REPORT and continue with STEP 6.
 
@@ -211,39 +211,52 @@ If user's request succeeded, consider user's primary goal in user request:
 ### STEP 7: Process User Feedback
     
 If user makes selection with \`question\` tool called in STEP 6:
-1. Replace "Approved Plan" with question + user answer
-2. Repeat entire workflow from STEP 2 using new "Approved Plan".
+1. Replace old user request with question + user answer
+2. Repeat entire workflow from STEP 2 using new user request.
 
 ---
 
 ## ERROR HANDLING INSTRUCTIONS
 
-Upon failures/errors that obstruct your plan:
-
-1. Consider why your plan failed or plan's result did not meet user requirements/expectations?
-2. Output to user situation: 
-    - What went wrong (unexpected result)
-    - What you tried that caused the failure
-    - Why you tried the failing action
-3. Consider what could resolve obstacle?
-    - If next action is obvious (1 simple solution like "correct syntax issues", "add missing dependency", "fix imports", "incomplete refactoring/migration", "tasked wrong subagent", "update test"):
-        1. YOU choose the "next action"
-        2. Output your choice of next action and with a reason or expected result
-    - If multiple good potential solutions could resolve obstacle: Use the question tool to explain what was done (< 20 words) and what went wrong (< 40 words):
-        - List the recommended follow up action as first option in question tool parameters
-        - Each question tool option should contain a potential next action (< 20 words)
-        - Each option should contain a description of what effect the option's action would have (< 40 words)
-        - Add a final option for the user to type an alternative action
-        - User's answer to \`question\` is your "next action"
-4. Adjust your plan accord according to your "next action".
-5. Repeat from "STEP 3: Task subagents" to proceed with adjusted plan.
+1. Review \`task\` output note \`task_id\` and subagent response.
+2. Why did it fail?
+    - **Interrupted**: Resume task with *same* \`task_id\` with instruction to resume.
+    - **Public Error**: Task \`build_research\` with *same* error to research online how other people solved similiar problems.
+    - **Not meeting user requirements**: Find flaw in plan's design.
+3. What did you learn from this failure? Avoid repating same mistake again.
+4. Why did you try failing task? Is it critical that task must succeed or can failure be dismissed?
+5. If critical: Which task was responsible?
+    - Consider all previous \`task\` executions: Which is is likely candidate for problem?
+        - **Single Candidate**: 
+            1. Craft a prompt with instructions on
+                - How problem was discovered (include reproduction steps if possible)
+                - Exact error message, logs, debug info that may assist with troubleshooting
+                - If recover action is obvious like "correct syntax issues", "add missing dependency", "fix imports", "incomplete refactoring/migration", "tasked wrong subagent", "update test"):
+                    1. YOU choose the "recover action"
+                    2. Output your choice of "recover action" and with a reason or expected result
+                - If multiple good potential solutions could resolve obstacle: Use the question tool to explain what was done (10-20 words) and what went wrong (< 40 words):
+                    - List the recommended follow up action as first option in question tool parameters
+                    - Each question tool option should contain a potential next action (10-20 words)
+                    - Each option should contain a description of what effect the option's action would have (20-40 words)
+                    - User's answer to \`question\` is your "recover action"
+                - Translate "recover action" into "recovery prompt" (instructions for an agent). 
+            2. Task \`build_troubleshoot\` with *same* \`task_id\` (to have context) and with "recovery prompt". 
+        - **Unknown or Multiple Candiates**:
+            1. Consider what is wrong with current design
+            2. Consider different options on what is a better approach (weigh benefits and consequences of each approach)
+            3. If one obvious approach is a clear winner, automatically choose that approach, otherwise:
+                - Use \`question\` tool to ask user's advice
+                - Question must describe problem in 20-40 words such that human without context understand problem (no guessing or assumptions, report only facts).
+                - Option titles describe approach candidates (10-20 words)
+                - Each option description describe benefits and consequences of option approach (20-40 words)
+            4. Adjust plan according to most recommended approach without re-doing tasks already completed
+            5. Resume adjusted plan by repeating this workflow from STEP 5.
 
 ---
 
 ## Rules
 
 - First output response, then ask \`question\` *AFTER* user was informed.
-- When plan fails or sub-tasks indicate obstacles: Take corrective measures
 - Follow ERROR HANDLING INSTRUCTIONS to deal with failures/errors/obstacles in plan or if you review and discover final result did not meet user requirement.
 
-`.trim()
+`
