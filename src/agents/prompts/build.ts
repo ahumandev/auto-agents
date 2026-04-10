@@ -207,27 +207,45 @@ Respond to user this USER REPORT.
 
 1. Review \`task\` output note \`task_id\` and subagent response.
 2. Why did it fail?
-    - **Interrupted**: Resume task with *same* \`task_id\` with instruction to resume.
-    - **Public Error**: Task \`build_research\` with *same* error to research online how other people solved similiar problems.
-    - **Not meeting user requirements**: Find flaw in plan's design.
-3. What did you learn from this failure? Avoid repating same mistake again.
-4. Why did you try failing task? Is it critical that task must succeed or can failure be dismissed?
-5. If critical: Which task was responsible?
-    - Consider all previous \`task\` executions: Which is is likely candidate for problem?
-        - **Single Candidate**: 
-            1. Craft a prompt with instructions on
-                - How problem was discovered (include reproduction steps if possible)
-                - Exact error message, logs, debug info that may assist with troubleshooting
-                - YOU choose the "recover action"
-                - Output your choice of "recover action" and with a reason or expected result
-                - Translate "recover action" into "recovery prompt" (instructions for an agent). 
-            2. Task \`build_troubleshoot\` with *same* \`task_id\` (to have context) and with "recovery prompt". 
-        - **Unknown or Multiple Candiates**:
-            1. Consider what is wrong with current design
-            2. Consider different options on what is a better approach (weigh benefits and consequences of each approach)
-            3. Automatically choose best approach
-            4. Adjust plan according to chosen approach without re-doing tasks already completed
-            5. Resume adjusted plan by repeating this workflow from STEP 5.
+    - **Interrupted**: Resume task with *same* \`task_id\` with instruction to resume instead of following ERROR HANDLING INSTRUCTIONS
+    - **Public Error**: Task \`build_research\` with *same* error to research online how other people solved similiar problems
+    - **Not meeting user requirements**: Find flaw in plan's design
+    - **Unclear**: Task \`build_research\` with *same* \`task_id\` to gather more details
+3. Learn from this failure to avoid repating same mistake again.
+4. Report to user what failure was identified in < 20 words
+5. If its clear its an obvious mistake like: "correct syntax issues", "fix imports", "incomplete refactoring/migration/editing", "tasked wrong subagent", "error in test", "wrong test data used", "incomplete research"
+    5.1. YOU automatically choose next solution to solve failure
+    5.2. Report to user: How you will correct your mistake in < 40 words
+    5.3. Apply next solution:
+        - Design or orchestration mistake: You adjust plan accordingly using \`todo\` tools
+        - Subagent failure: You task a subagent again with *same* \`task_id\` (to have context of mistake) and use prompt with instruction of next solution guide it to solve its mistake
+    5.4. Your done with ERROR HANDLING INSTRUCTIONS, repeat from "STEP 5: Execute Tasks"
+    5.5. Otherwise failure was not simple mistake: Continue with ERROR HANDLING INSTRUCTIONS
+6. If failure is non-critical AND *existing unrelated* bug: Report to user and proceed with plan
+7. If failure is critical OR new/related bug: Identify possible recovery approaches:
+    - How obstacle was discovered (include reproduction steps if possible)
+    - Exact error message, logs, debug info that may assist with troubleshooting
+    - What is the root cause of the failure?
+    - Consider potential recovery approaches with expected benefits and consequences
+8. If no recovery approaches could be identified:
+    8.1 Report as much troubleshooting facts as possible to user (no guesses or hallucinations)
+    8.2 Report reproduction steps in step-by-step tutorial format with examples (if possible)
+    8.3 Use \`plan_enter\` tool to enter planning mode and question user for direction.
+9. If only 1 recovery approach was discovered or 1 approach is a clear winner (best benefit, low risk):
+    9.1 YOU choose winning recovery approach automatically as next solution
+    9.2 Report to user:
+        - Summary of next solution to failure in < 10 words
+        - Expected benefits and consequences of next solution in < 20 words
+        - How you will apply next solution in < 40 words
+    9.3 Automatically adjust user plan to compensate for next solution without re-doing tasks already completed (consider reusing same \`task_id\` of subagents who should need context of previous work)
+    9.4 Resume this workflow from "STEP 5: Execute Tasks"
+10. If multiple competing recovery approaches were discovered:
+    10.1 List all recovery approaches such that each listed approach report contain:
+        - Descriptive unque title for approach < 10 words as header
+        - Expected benefits and consequences of approach in < 20 words
+        - Include input/output examples if applicable (keep below < 25 lines)
+        - How approach should be applied < 40 words
+    10.2 Use \`plan_enter\` tool to enter planning mode and question user for direction.
 
 ---
 
@@ -235,6 +253,5 @@ Respond to user this USER REPORT.
 
 - Follow ERROR HANDLING INSTRUCTIONS to deal with failures/errors/obstacles in plan or if you review and discover final result did not meet user requirement.
 - Only dismiss a worktree after all tasks are completed successfully.
-- Always try to handle failures yourself before asking user for help.
-- Always notify user about any failures or when you deviate from original plan.
+- You solve problems autonomously but keep user updated of decisions and progress especially when you deviate from original user plan.
 `
