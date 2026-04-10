@@ -25,20 +25,22 @@ import { executeExcelPrompt } from "./prompts/execute/excel";
 import { executeOsPrompt } from "./prompts/execute/os";
 import { executePrompt } from "./prompts/execute";
 import { executeScriptPrompt } from "./prompts/execute/script";
+import { executeWorktreePrompt } from "@/agents/prompts/execute/worktree";
 import { planPrompt } from "./prompts/plan"
 import { queryBrowserPrompt } from "./prompts/query/browser";
 import { queryCodePrompt } from "./prompts/query/code";
 import { queryExcelPrompt } from "./prompts/query/excel";
 import { queryGitPrompt } from "./prompts/query/git";
+import { queryOsPrompt } from "./prompts/query/os";
 import { queryTextPrompt } from "./prompts/query/text";
 import { queryWebPrompt } from "./prompts/query/web";
-import { executeWorktreePrompt } from "@/agents/prompts/execute/worktree";
 
 type ModelTier = "fast" | "balanced" | "smart"
 type AgentConfigWithTier = AgentConfig & { tier?: ModelTier }
 type AgentMap = Record<string, AgentConfigWithTier>
 
 const agents: AgentMap = {
+
     ask: {
         color: "#40FF40",
         description: "Generate research reports (read-only)",
@@ -587,7 +589,7 @@ const agents: AgentMap = {
 
     execute_os: {
         color: "#802020",
-        description: "Task `execute_os` to execute bash commands, *project* scripts, move/rename files/directories or administrate operating system; not for source code editing, browser automation, or online research",
+        description: "Task `execute_os` to execute single bash commands, *project* scripts, move/rename files/directories or administrate operating system; not for source code editing, browser automation, or online research",
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -610,7 +612,7 @@ const agents: AgentMap = {
 
     execute_script: {
         color: "#802020",
-        description: "Task `execute_script` serve repetitive actions, media/data conversions, content generations via *temporary* helper scripts like 'for each X file in Y do Z' or 'convert all A files to B using C' or 'generate 10MB of X using given template'; NOT intended to maintain project startup/test/deployment scripts",
+        description: "Task `execute_script` to execute repetitive actions, document/media conversions, data translations, generate/render content, automate multiple commands, utilize scriptable libraries/frameworks to handle user request via *temporary* helper scripts like 'for each X file in Y do Z' or 'convert all A files to B' or 'generate X with Z' or 'use app A's output to invoke app B'; NOT intended to maintain project startup/test/deployment scripts",
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -754,6 +756,26 @@ const agents: AgentMap = {
             read: "allow",
         },
         prompt: queryGitPrompt,
+        temperature: 0.1,
+        tier: "fast",
+    },
+
+    query_os: {
+        color: "#208020",
+        description: "Task `query_os` to find hardware, software, system, network, service, process, or OS-related information, versions, help-command info, status, or configurations",
+        hidden: true,
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "deny",
+            external_directory: "allow",
+            glob: "allow",
+            grep: "allow",
+            list: "allow",
+            lsp: "allow",
+            read: "allow",
+        },
+        prompt: queryOsPrompt,
         temperature: 0.1,
         tier: "fast",
     },

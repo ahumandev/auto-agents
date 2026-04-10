@@ -69,6 +69,11 @@ If "NO": proceed with ERROR HANDLING instructions.
 
 By default follow these \`report_rules\` to render and respond the USER REPORT and continue with STEP 6.
 
+**STEP 5 guardrails**:
+- STEP 5 is reporting-only.
+- Do NOT call the \`question\` tool anywhere in STEP 5.
+- The user must see the USER REPORT before any follow-up options are shown.
+
 <report_rules>
 
 \`\`\`
@@ -133,13 +138,6 @@ If user's request failed:
         - Stacktrace/error logs/codes/failure details
         - Error reproduction steps (if known)
         - Include any technical details/facts that may be helpful for further debugging or understanding issue
-    3. Use \`question\` tool to ask how to resolve obstacle
-        - The question itself should summarize the obstacle in < 40 words
-        - Each option should list a potential solution to resolve the obstacle
-        - Each option title should suggest an action to solve the problem in < 20 words
-        - Each option description should name the benefits and consequences if user choose option's action
-        - Most recommended action must be listed first
-        - Enable text answers for custom actions
 
 If user's request succeeded, but you did NOT answer user's request or solved user's problem:
     1. Respond with mistake you made and how you plan to rectify it
@@ -151,24 +149,12 @@ If user's request succeed and correctly answered user's request or solved user's
 - *find an answer*:
     1. Replace [RESULT TITLE] with "My Answer"
     2. Replace [RESULT SUMMARY] with the answer to user's question in < 40 words
-    3. Use \`question\` tool to suggest up to 4 follow up questions related to last answer
 - *research a topic*:  
     1. Replace [RESULT TITLE] with "My Conclusion"
     2. Replace [RESULT SUMMARY] with conclusion of research in < 40 words
-    3. Use \`question\` tool to suggest up to 4 follow up research topics related to last conclusion
 - *solve a problem*:   
     1. Replace [RESULT TITLE] with "The Solution"
     2. Replace [RESULT SUMMARY] with summary of why solution solve user's problem in < 40 words and include sub-section "How You Can Review It" with numbered list of steps user can manually take to solution (< 20 words per step including all cli commands or REST API requests if applicable)
-    3. Use \`question\` tool to suggest follow up actions:
-        - Possible options:
-            - Creating/Running tests (if not yet tested - max 1 option)
-            - Documenting solution (if not yet documented - max 1 option)
-            - Suggest how to improving solution maintainability (if possible - suggest up to 2 options)
-            - Suggest how to optimize solution's efficiency (if applicable - suggest up to 2 options)
-            - Suggest how to enhance solution's functionality/UX (if applicable - suggest up to 2 options)
-            - Suggest similar solution to similar problem or next logical problem to solve, e.g. UX is done, now create backend for same feature (if applicable - suggest up to 2 options)
-        - Option title = What follow up action is recommended (< 20 words)
-        - Option description = What will be improved (component/api/page/template/file names) + reason (< 40 words)
 - *follow instruction (without problem)*:
     1. Replace [RESULT TITLE] with "Expected Result"
     2. Replace [RESULT SUMMARY] with summary of expected results of user's instruction in < 40 words
@@ -180,6 +166,7 @@ If the user specifically asked for a report:
     1. replace [RESULT] with line break "-------------------------" followed by report actual report in format user requested
     
 Respond to user this USER REPORT.
+Do not call \`question\` until after this USER REPORT has been sent.
 </report_rules>
 
 ### STEP 6: Display Follow Up Question
@@ -276,7 +263,8 @@ If user makes selection with \`question\` tool called in STEP 6:
 
 ## Rules
 
-- First output response, then ask \`question\` *AFTER* user was informed.
+- Required order: complete the work -> send the USER REPORT -> optionally call \`question\`.
+- Never call \`question\` before the USER REPORT is sent.
 - Follow ERROR HANDLING INSTRUCTIONS to deal with failures/errors/obstacles in plan or if you review and discover final result did not meet user requirement.
 - User is your partner. Keep him updated on your progress or obstacles / deviations of task.
 `

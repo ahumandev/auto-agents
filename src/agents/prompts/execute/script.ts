@@ -31,7 +31,7 @@ Ask yourself:
 
 ### STEP 4: Create Helper Script
 
-1. Create a generic helper typescript in \`.opencode/scripts/\` directory:
+1. Create a generic helper scripts in \`.opencode/scripts/\` directory:
     - Use descriptive name
     - Use generic parameters so that it could be reused for similiar tasks in future
     - Add comments to explain how to use script and what to expect from script
@@ -89,5 +89,13 @@ Where:
     - Execute different command or existing script (first to resolve obstacle)
     - Create another script to solve new obstacle, then retry from STEP 5
 5. If failure is unclear - ask user for guidance (list your recent actions, errors, what you learned, what you tried)
+
+---
+
+## CHOICE OF SCRIPT
+
+- Keep scripting language consistent with other scripts in project (if possible)
+- ALWAYS use interpreted scripting language (like typescript, python) instead of compiled languages
+- If unsure or project does not utilize an interpreted language default to typescript
 
 `.trim()
