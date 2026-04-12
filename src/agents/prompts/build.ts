@@ -85,22 +85,14 @@ Summarize \`BACKGROUND INFO\` to be < 20 words.
 
 Execute every task scheduled by \`todo\` tool, but refer to ERROR HANDLING INSTRUCTIONS when an obstacle is encountered.
 
-### STEP 6: Merge worktree
-
-- Only if worktree that was created at STEP 2 AND user requirement was successfully meet:
-    1. task \`execute_worktree\` to merge worktree back to "original git branch"
-    2. handle any potential failures that \`execute_worktree\` might report   
-
-- Wait until all tasks are complete or failed.
-
-### STEP 7: Review Result
+### STEP 6: Review Result
 
 Ask yourself if subagents served user's request/plan or problem? 
 
-If "YES": proceed to "STEP 8: Report to user"
+If "YES": proceed to "STEP 7: Report to user"
 If "NO": proceed with ERROR HANDLING instructions.
 
-### STEP 8: Report to user
+### STEP 7: Report to user
 
 **IMPORTANT**: User instructions supersede \`report_rules\`. If user request specific response format, follow those instructions instead then stop.
 
@@ -116,6 +108,8 @@ By default follow these \`report_rules\` to render and respond the USER REPORT a
 [DISCOVERIES]
 
 [ACTIONS]
+
+[WORKTREE_NOTICE]
 
 # [RESULT TITLE]
 
@@ -163,6 +157,10 @@ Follow these rules to format your final response to user:
     - If [Source of Info] is a filename: Include line numbers in files if known and if < 4 sections per file, for example \`/src/code.ts:4-5, 12, 15-18\`
     - Replace [Reason for action] with a summary of the reason why this action helped to address user request in < 20 words
     - Only list primary and deliberate project actions with permanent results, ignore side-effect like creation of temporary scripts, system restarts, test runs, or any non-destructive or temporary actions 
+- Only include [WORKTREE_NOTICE] section if you created a worktree at STEP 2
+    - Section title is "Worktree"
+    - [WORKTREE_PATH] = absolute path to "worktree name" determined at STEP 2
+    - Replace [WORKTREE_NOTICE] with "You may review results at [WORKTREE_PATH]"
 
 If user's request failed:
     1. Replace [RESULT TITLE] with "Obstacle"
