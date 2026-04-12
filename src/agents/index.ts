@@ -1,4 +1,4 @@
-import type { AgentConfig } from "@opencode-ai/sdk/v2"
+import type { AgentConfig, PermissionConfig } from "@opencode-ai/sdk/v2"
 import { askPrompt } from "./prompts/ask";
 import { buildFeaturePrompt } from "./prompts/build/feature";
 import { buildFormatPrompt } from "./prompts/build/format";
@@ -36,7 +36,7 @@ import { queryTextPrompt } from "./prompts/query/text";
 import { queryWebPrompt } from "./prompts/query/web";
 
 type ModelTier = "fast" | "balanced" | "smart"
-type AgentConfigWithTier = AgentConfig & { tier?: ModelTier }
+type AgentConfigWithTier = AgentConfig & { permission?: PermissionConfig, tier?: ModelTier }
 type AgentMap = Record<string, AgentConfigWithTier>
 
 const agents: AgentMap = {
@@ -58,6 +58,7 @@ const agents: AgentMap = {
                 "*": "deny",
                 "query*": "allow",
             },
+            "task_resume": "allow",
             "todo*": "allow"
         },
         prompt: askPrompt,
@@ -78,7 +79,9 @@ const agents: AgentMap = {
             task: {
                 "*": "deny",
                 "build*": "allow",
+                "execute_worktree": "allow",
             },
+            "task_resume": "allow",
             "todo*": "allow",
         },
         prompt: buildPrompt,
@@ -109,6 +112,7 @@ const agents: AgentMap = {
                 query_git: "allow",
                 query_text: "allow"
             },
+            "task_resume": "allow",
             "todo*": "allow",
         },
         prompt: buildFeaturePrompt,
@@ -133,6 +137,7 @@ const agents: AgentMap = {
                 query_code: "allow",
                 query_text: "allow",
             },
+            "task_resume": "allow",
             "todo*": "allow",
         },
         prompt: buildFormatPrompt,
@@ -155,6 +160,7 @@ const agents: AgentMap = {
                 "build*": "deny",
                 plan: "deny",
             },
+            "task_resume": "allow",
             "todo*": "allow",
         },
         prompt: buildGeneralPrompt,
@@ -176,6 +182,7 @@ const agents: AgentMap = {
                 query_git: "allow",
                 query_text: "allow"
             },
+            "task_resume": "allow",
             "todo*": "allow",
         },
         prompt: buildGitCommitPrompt,
@@ -204,6 +211,7 @@ const agents: AgentMap = {
                 query_code: "allow",
                 query_git: "allow",
             },
+            "task_resume": "allow",
             "todo*": "allow",
         },
         prompt: buildRefactorPrompt,
@@ -224,6 +232,7 @@ const agents: AgentMap = {
                 "*": "deny",
                 "query*": "allow",
             },
+            "task_resume": "allow",
             "todo*": "allow",
         },
         prompt: buildResearchPrompt,
@@ -248,6 +257,7 @@ const agents: AgentMap = {
                 query_git: "allow",
                 query_text: "allow",
             },
+            "task_resume": "allow",
             "todo*": "allow",
         },
         prompt: buildReviewApiPrompt,
@@ -273,6 +283,7 @@ const agents: AgentMap = {
                 query_git: "allow",
                 query_text: "allow",
             },
+            "task_resume": "allow",
             "todo*": "allow",
         },
         prompt: buildReviewUiPrompt,
@@ -301,6 +312,7 @@ const agents: AgentMap = {
                 query_code: "allow",
                 query_git: "allow",
             },
+            "task_resume": "allow",
             "todo*": "allow",
         },
         prompt: buildTestPrompt,
@@ -325,6 +337,7 @@ const agents: AgentMap = {
                 execute_os: "allow",
                 "query*": "allow",
             },
+            "task_resume": "allow",
             "todo*": "allow",
         },
         prompt: buildTroubleshootPrompt,
@@ -479,6 +492,7 @@ const agents: AgentMap = {
         mode: "primary",
         permission: {
             "*": "deny",
+            task_resume: "allow",
             question: "allow",
             read: "allow",
             skill: {
@@ -559,6 +573,7 @@ const agents: AgentMap = {
                 "*": "deny",
                 "document_*": "allow"
             },
+            "task_resume": "allow",
             "todo*": "allow",
         },
         prompt: executeDocumentPrompt,
@@ -580,6 +595,7 @@ const agents: AgentMap = {
                 query_excel: "allow",
                 query_text: "allow"
             },
+            "task_resume": "allow",
             "todo*": "allow",
         },
         prompt: executeExcelPrompt,
@@ -640,6 +656,7 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
+            bash: "allow",
             "filesystem*": "allow",
             "git_*": "allow",
         },
@@ -668,6 +685,7 @@ const agents: AgentMap = {
                 "*": "allow",
                 "build*": "deny"
             },
+            "task_resume": "allow",
         },
         prompt: planPrompt,
         temperature: 0.7,
@@ -767,6 +785,7 @@ const agents: AgentMap = {
         mode: "subagent",
         permission: {
             "*": "deny",
+            bash: "allow",
             doom_loop: "deny",
             external_directory: "allow",
             glob: "allow",

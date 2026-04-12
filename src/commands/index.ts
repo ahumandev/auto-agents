@@ -1,3 +1,5 @@
+import type { Config } from "@opencode-ai/sdk/v2"
+
 /**
  * Command definitions for the Autocode plugin.
  *
@@ -13,13 +15,7 @@
  * When deployed as a npm package, only this file is used.
  */
 
-type CommandMap = Record<string, {
-    template: string
-    description?: string
-    agent?: string
-    model?: string
-    subtask?: boolean
-}>
+type CommandMap = NonNullable<Config["command"]>
 
 export const commands: CommandMap = {
 
@@ -61,20 +57,21 @@ Perform a comprehensive documentation update for the entire project:
         template: "$ARGUMENTS",
     },
 
+    /**
+     * task_resume tool does following:
+     * 1. Find current session_id
+     * 2. Find all sub-sessions with parent_id = session_id
+     * 3. Mark last sub-session as resume candidate if:
+     *   - it was potentially interrupted, and
+     *   - if last tool call was \`task\`
+     * 4. Add remaining sub-sessions as resume candidates if: they too were interrupted within 4 seconds of "resume candidate"
+     * 5. For each resume candidate:
+     *   - active sub-session with same agent, task_id (sub-session_id) but with prompt "You were interrupted. You MUST use \`task_resume\` tool, then resume your own work"
+     */
     "resume": {
+        agent: "execute",
         description: "Resume interrupted session",
-        template: `
-<RESUME_PROMPT>
-You had been interrupted. Recursively resume every interrupted \`task\` tool call with these steps:
-
-1. Check if last \`task\` tool calls were completed or interrupted? 
-2. If interrupted, check if \`task_id\` is available:
-    - \`task_id\` was found: Call last \`task\` again with same input parameters \`subagent_type\` (subagent name) and \`task_id\` (session id), but use this very same \`RESUME_PROMPT\` block as input parameter to resume existing task
-    - \`task_id\` is unknown: Call last \`task\` again with **ALL SAME** input parameters \`subagent_type\` (subagent name) and \`task_id\` (session id) and \`prompt\` to start fresh task
-3. Wait until all \`task\` calls (subagents) completed.
-4. Only resume your own work after all sub-tasks of subagents completed.
-</RESUME_PROMPT>
-`
+        template: "You were interrupted. Call \`task_resume\` tool, then resume your own work."
     },
 
 }

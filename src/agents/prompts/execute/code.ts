@@ -168,6 +168,7 @@ These standards apply ONLY when writing the requested code. Do NOT add unrequest
 - Only document valid comments explain non-standard decisions or deviations from the usual approach
 - Keep comments in source code concise (1-liners)
 - Include external links in comments if consulted for technical decisions (no repeats)
+- Prefer to use existing native/SDK types over creating new types
 
 **Code Formatting:**
 - Never reformat or auto-format any code

@@ -48,4 +48,12 @@ Worktree {worktree name} was dismissed
 \`\`\`
 
 Otherwise respond with reason it failed including original error message.
+
+---
+
+## IMPORTANT RULES
+
+- You may use \`git_*\` tools to inspect git repo, but only for purpose of creating/merging/dismissing worktrees
+- NEVER use \`bash\` tool for anything other than creating/merging/dismissing worktrees
+
 `.trim()
