@@ -3,7 +3,6 @@ import { askPrompt } from "./prompts/ask";
 import { buildFeaturePrompt } from "./prompts/build/feature";
 import { buildFormatPrompt } from "./prompts/build/format";
 import { buildGeneralPrompt } from "./prompts/build/general";
-import { buildGitCommitPrompt } from "./prompts/build/git_commit";
 import { buildPrompt } from "./prompts/build"
 import { buildRefactorPrompt } from "./prompts/build/refactor";
 import { buildResearchPrompt } from "./prompts/build/research";
@@ -22,10 +21,10 @@ import { executeAuthorPrompt } from "./prompts/execute/author";
 import { executeCodePrompt } from "./prompts/execute/code";
 import { executeDocumentPrompt } from "./prompts/execute/document"
 import { executeExcelPrompt } from "./prompts/execute/excel";
+import { executeGitCommitPrompt } from "./prompts/execute/git_commit";
 import { executeOsPrompt } from "./prompts/execute/os";
 import { executePrompt } from "./prompts/execute";
 import { executeScriptPrompt } from "./prompts/execute/script";
-import { executeWorktreePrompt } from "@/agents/prompts/execute/worktree";
 import { planPrompt } from "./prompts/plan"
 import { queryBrowserPrompt } from "./prompts/query/browser";
 import { queryCodePrompt } from "./prompts/query/code";
@@ -79,7 +78,7 @@ const agents: AgentMap = {
             task: {
                 "*": "deny",
                 "build*": "allow",
-                "execute_worktree": "allow",
+                "execute_git_commit": "allow"
             },
             "task_resume": "allow",
             "todo*": "allow",
@@ -164,29 +163,6 @@ const agents: AgentMap = {
             "todo*": "allow",
         },
         prompt: buildGeneralPrompt,
-        tier: "smart",
-    },
-
-    build_git_commit: {
-        color: "#808020",
-        description: "Task `build_git_commit` only if reviewing changes and creating professional git commits",
-        hidden: true,
-        mode: "subagent",
-        permission: {
-            "*": "deny",
-            doom_loop: "ask",
-            "git_*": "allow",
-            task: {
-                "*": "deny",
-                query_code: "allow",
-                query_git: "allow",
-                query_text: "allow"
-            },
-            "task_resume": "allow",
-            "todo*": "allow",
-        },
-        prompt: buildGitCommitPrompt,
-        temperature: 0.1,
         tier: "smart",
     },
 
@@ -603,6 +579,32 @@ const agents: AgentMap = {
         tier: "balanced",
     },
 
+    execute_git_commit: {
+        color: "#808020",
+        description: "Task `build_git_commit` only if reviewing changes and creating professional git commits",
+        hidden: true,
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "ask",
+            git_git_add: "allow",
+            git_git_commit: "allow",
+            git_git_log: "allow",
+            git_git_status: "allow",
+            task: {
+                "*": "deny",
+                query_code: "allow",
+                query_git: "allow",
+                query_text: "allow"
+            },
+            "task_resume": "allow",
+            "todo*": "allow",
+        },
+        prompt: executeGitCommitPrompt,
+        temperature: 0.5,
+        tier: "balanced",
+    },
+
     execute_os: {
         color: "#802020",
         description: "Task `execute_os` to execute single bash commands, *project* scripts, move/rename files/directories or administrate operating system; not for source code editing, browser automation, or online research",
@@ -647,21 +649,6 @@ const agents: AgentMap = {
         },
         prompt: executeScriptPrompt,
         temperature: 0.3,
-        tier: "balanced",
-    },
-
-    execute_worktree: {
-        color: "#802020",
-        description: "Task `execute_worktree` to create, merge or dismiss worktrees",
-        mode: "subagent",
-        permission: {
-            "*": "deny",
-            bash: "allow",
-            "filesystem*": "allow",
-            "git_*": "allow",
-        },
-        prompt: executeWorktreePrompt,
-        temperature: 0.1,
         tier: "balanced",
     },
 
