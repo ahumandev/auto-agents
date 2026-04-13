@@ -1,43 +1,39 @@
-OpenCode plugin for agent orchestration, generated skills, and memory-document maintenance.
+# Project Purpose
+Bundle OpenCode agents, commands, and generated skills for planning, execution, research, and documentation.
 
-## *REQUIRED* Reading
-- [Installation and Usage Documentation](INSTALL.md)
-- [Security Documentation](SECURITY.md)
+# User Roles
+- **OpenCode host**: Loads bundled defaults without manual agent or command wiring.
+- **OpenCode user**: Uses `ask`, `plan`, `build`, and `execute` for guided work.
+- **Planner/researcher**: Uses planning and query flows before implementation.
+- **Operator/executor**: Runs approved plans or direct actions through scoped subagents.
+- **Documentation maintainer**: Keeps memory and root docs aligned with repo facts.
 
-## Project Map
-- Entry plugin: `src/plugin.ts`
-- Agent registry: `src/agents/index.ts`
-- Managed skill generator: `src/skills/index.ts`
-- Agent memory docs: `.opencode/skills/plan/**`
+# Primary Features
+- **Config injection**: Merge bundled agents and commands @ `src/plugin.ts`
+- **Primary agents**: Orchestrate ask, plan, build, execute @ `src/agents/index.ts`
+- **Specialist subagents**: Scope build, query, execute, document tasks @ `src/agents/index.ts`
+- **Bundled commands**: Register document and resume commands @ `src/commands/index.ts`
+- **Managed skills**: Generate `author_*` and `test_*` skills @ `src/skills/index.ts`
+- **Resume tool**: Resume interrupted delegated sessions @ `src/tools/task_resume.ts`
 
-## Primary Agents
-- `ask` - read-only research and reporting
-- `plan` - interview, research, and submit plans before implementation
-- `build` - execute approved plans via delegated `build_*` phases
-- `execute` - direct-action router for non-planning work
+# Architecture
+- **Plugin entry**: TypeScript OpenCode plugin @ `src/plugin.ts`
+- **Agent registry**: TypeScript agent and permission catalog @ `src/agents/index.ts`
+- **Agent prompts**: TypeScript prompt sources @ `src/agents/prompts/`
+- **Command registry**: TypeScript command definitions @ `src/commands/index.ts`
+- **Managed skills**: TypeScript generated-skill sources @ `src/skills/`
+- **Tool extensions**: TypeScript runtime tools @ `src/tools/`
+- **Agent memory docs**: Markdown planning memory @ `.opencode/skills/plan/`
 
-## Specialist Families
-- `build_*` - implementation, review, testing, troubleshooting, formatting, fallback execution
-- `query_*` - read/query specialists for code, git, text, web, browser, excel
-- `execute_*` - direct execution specialists for code, docs, OS, excel, authoring
-- `document_*` - maintain agent/project memory docs; `document_readme` owns `README.md` and `AGENTS.md`
+# File Structure
+- `.opencode/plugin/autocode.ts`: Local dev shim to dist plugin
+- `.opencode/opencode.jsonc`: Local OpenCode config schema file
+- `src/skills/index.test.ts`: Tests generated skill injection
+- `src/tools/index.test.ts`: Tests task resume wiring
 
-## Working Conventions
-- Prefer accurate, source-backed docs; do not repeat stale claims from prior revisions.
+# Rules
 - Treat this repo as a plugin/library, not a standalone app.
-- Preserve deny-by-default permission intent when documenting or changing agent behavior.
-- User config may override bundled agent definitions; document defaults as defaults.
-- Managed skills are generated at runtime into the OS temp dir `autocode-opencode-skills` and then prepended to OpenCode skill paths.
-- Keep end-user docs in root markdown files; agent memory belongs under `.opencode/skills/plan/`.
-
-## Documentation Notes
-- `README.md` should stay human-readable and tutorial-style.
-- `AGENTS.md` should stay concise and optimized for contributors/operators.
-- If adding markdown links, link only to repo-local markdown files that exist.
-- This repo currently has no frontend UX surface; avoid implying pages, routes, or styling systems.
-
-## Review Focus Areas
-- Permission changes in `src/agents/index.ts`, especially broad access such as `build_general` and `execute_os`
-- Prompt/agent naming consistency across families
-- Generated skill behavior and tests
-- Drift between root docs and `.opencode/skills/plan/*` memory docs
+- Review permission changes in `src/agents/index.ts`
+- Check naming consistency across prompt and agent families.
+- Verify generated skill behavior and related tests.
+- Prevent drift between root docs and `.opencode/skills/plan/*` memory docs.

@@ -53,17 +53,29 @@ When called directly by user (Selective Mode):
 \`\`\`markdown
 # [Project Name]
 
+## Problem
+
 [PROBLEM STATEMENT]
 
+## Solution
+
 [SOLUTION SUMMARY]
+
+## Persona
 
 [UX PERSONA]
 
 ## Installation
 
+### Prerequisites
+
 [PREREQUISITES]
 
+### Local Setup
+
 [LOCAL SETUP STEPS]
+
+### Startup Instructions
 
 [STARTUP STEPS]
 
@@ -71,13 +83,21 @@ When called directly by user (Selective Mode):
 
 [COMMON USAGE]
 
+### Menu
+
 [MENU]
+
+### User Guide
 
 [TUTORIAL]
 
 ## Deployment
 
+### Production Packaging
+
 [PACKAGING STEPS]
+
+### Production Deployment
 
 [DEPLOYMENT STEPS]
 
@@ -87,7 +107,11 @@ When called directly by user (Selective Mode):
 
 ## Terminology
 
+### Acronyms
+
 [ACRONYMS]
+
+### Definitions
 
 [DEFINITIONS]
 \`\`\`
@@ -112,7 +136,7 @@ Replace placeholders in README.md as follow:
 
 **VERY IMPORTANT**:
 
-- If you are unsure or unclear about an item: remove item or section from \`README.md\` - No guessing, only keep facts and relevant content
+- If you are unsure or unclear about an item: remove item or section with section title from \`README.md\` - No guessing, only keep facts and relevant content
 - \`README.md\` is intended for humans: Use English in user manual style (natural language)
 - If old \`README.md\` is already in "README.md Layout" format, update only outdated sections, otherwise rewrite entire document.
 - Task \`document_agents\` to convert your new human readable \`README.md\` to LLM readable \`AGENTS.md\`

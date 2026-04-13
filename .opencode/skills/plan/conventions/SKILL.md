@@ -6,26 +6,25 @@ description: Use this skill to decide on a name of variable, class, file, system
 # Project Conventions
 
 ## Internal Acronyms
-- **PRD**: Product requirements document used by the plan agent skill.
-- **UX**: User experience flow and styling documentation scope.
+- **PRD**: Product requirements document used by the `document_prd` memory flow.
 
 ## Definitions
 - **Primary agent**: Top-level agent users switch to directly, such as `ask`, `plan`, `build`, or `execute`.
 - **Subagent**: Delegated specialist with `mode: "subagent"` and a task-style name.
 - **Managed skill**: Built-in skill defined in `src/skills/**` and generated into a temporary `SKILL.md` file.
 - **Generated skills root**: Temp directory `autocode-opencode-skills` where built-in skills are materialized.
-- **Documentation agent**: `document_*` subagent that owns one project-memory doc file.
+- **Documentation agent**: `document_*` subagent with one explicitly assigned documentation file.
 - **Agentic memory docs**: Project docs under `.opencode/skills/plan/**/SKILL.md` maintained for agents, not end users.
 - **Dev shim**: `.opencode/plugin/autocode.ts`, a local-only re-export of the built plugin.
 
 ## Naming Rules
 ### Agent Families
 **Why:** Prefixes encode role and permissions.
-**Pattern:** User-facing primaries use bare verbs/nouns (`ask`, `plan`, `build`, `execute`). Delegated specialists are snake_case family names: `build_*` for implementation orchestration, `query_*` for read-only retrieval, `execute_*` for direct action, and `document_*` for project-memory docs.
+**Pattern:** User-facing primaries use bare names (`ask`, `plan`, `build`, `execute`). Delegated specialists use snake_case family prefixes: `build_*`, `query_*`, `execute_*`, and `document_*`.
 
 ### Documentation Agent Ownership
-**Why:** Each memory file has a single canonical maintainer.
-**Pattern:** `document_<topic>` owns `.opencode/skills/plan/<topic>/SKILL.md`; examples: `document_conventions` → `plan/conventions/SKILL.md`, `document_prd` → `plan/prd/SKILL.md`.
+**Why:** Each maintained doc has a single canonical owner.
+**Pattern:** Ownership is declared centrally in `src/agents/prompts/execute/document.ts`. Examples: `document_conventions` → `.opencode/skills/plan/conventions/SKILL.md`, `document_design` → `.opencode/skills/design/code/SKILL.md`, `document_install` → `.opencode/skills/design/install/SKILL.md`, `document_prd` → `.opencode/skills/plan/prd/SKILL.md`.
 
 ### Prompt Export Names
 **Why:** Prompt constants mirror agent identifiers predictably.
@@ -33,11 +32,11 @@ description: Use this skill to decide on a name of variable, class, file, system
 
 ### Prompt File Layout
 **Why:** File paths mirror agent namespace depth.
-**Pattern:** Primary prompts live directly under `src/agents/prompts/` (`ask.ts`, `plan.ts`, `build.ts`, `execute.ts`). Specialist prompts live in namespace folders like `build/feature.ts`, `query/code.ts`, `execute/document/conventions.ts`.
+**Pattern:** Primary prompts live under `src/agents/prompts/` (`ask.ts`, `plan.ts`, `build.ts`, `execute.ts`). Specialist prompts live in namespace folders like `build/feature.ts`, `query/code.ts`, `execute/document/conventions.ts`.
 
-### Planning Phase Vocabulary
-**Why:** Plan output and build delegation depend on fixed phase labels.
-**Pattern:** Planning uses category names exactly as written in `plan.ts`: `feature`, `refactor`, `troubleshoot`, `research`, `automate`, `draft`, `brainstorm`, `document`, `verification`, `general`. Phase names should be prefixed with one of these categories.
+### Verification Build Names
+**Why:** Verification phases use dedicated review agent names.
+**Pattern:** API verification uses `build_review_api`, UI verification uses `build_review_ui`, and test-writing/fixing uses `build_test`.
 
 ### Skill Names and Paths
 **Why:** Built-in skills are generated from metadata, not stored directly at their runtime location.
@@ -51,12 +50,8 @@ description: Use this skill to decide on a name of variable, class, file, system
 **Why:** Agent configs rely on a small fixed capability vocabulary.
 **Pattern:** `tier` is always one of `smart`, `balanced`, or `fast`.
 
-### Agent Color Semantics
-**Why:** Colors are used as role cues, not arbitrary decoration.
-**Pattern:** `src/agents/index.ts` documents `read-only = green`, `writable = red`, and `blue = orchestrators`; concrete families follow that legend (`query_*` green, many write-capable agents red-toned, top-level orchestrators blue/cyan/magenta).
-
 ### Package Naming Split
-**Why:** Repo and plugin names differ in a non-obvious way.
-**Pattern:** The npm package is named `autocode`, while the plugin entry comments and local `.opencode` setup refer to it as the Autocode plugin for OpenCode.
+**Why:** Repo and install package names differ in a non-obvious way.
+**Pattern:** The repo/package uses `autocode` (`package.json` name and `.opencode/plugin/autocode.ts`), while installation docs reference the published plugin package as `@autocode-ai/plugin`.
 
 **IMPORTANT**: Update this file whenever new naming conventions or domain terms are introduced.

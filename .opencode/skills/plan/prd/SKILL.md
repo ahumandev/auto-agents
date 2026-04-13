@@ -6,48 +6,49 @@ description: Use this skill before planning any feature to understand the projec
 # Product Requirements
 
 ## Problem Statement
-Autocode provides an OpenCode plugin that installs specialized agents and managed skills so users can plan work, delegate implementation, research the codebase, run reviews, and maintain project documentation inside the same workspace.
+This repository ships an OpenCode plugin that injects a curated agent catalog, commands, and generated skills so work can be planned, delegated, executed, researched, reviewed, and documented inside OpenCode.
 
 ## Feature Requirements
-- **Plugin registration**: `src/plugin.ts` merges the project's agent definitions into OpenCode config and prepends generated managed skills.
-- **Interactive planning**: `plan` interviews users with `question`, researches via `query_*` subagents, uses `plan*` skills, and submits plans instead of implementing directly.
-- **Approved-plan execution**: `build` consumes an approved plan, creates per-phase todos, delegates each phase to `build_*` supervisors, and reports outcomes plus suggested follow-ups.
-- **Immediate execution**: `execute` routes non-planning requests to code, OS, document, research, review, or troubleshooting subagents.
-- **Documentation orchestration**: `execute_document` delegates memory-doc maintenance to `document_*` specialists and always runs `document_readme` last.
-- **Verification workflows**: `build_feature`, `build_test`, `build_review_api`, and `build_review_ui` require concrete verification and do not declare success without evidence.
-- **Managed skills**: the plugin generates bundled authoring and test skills into a temp directory and injects that path ahead of existing skill paths.
-- **Permission isolation**: each agent has an explicit deny-by-default or tightly scoped allowlist for tools, skills, and subagents.
+- **Config injection**: `src/plugin.ts` merges bundled agents and commands into OpenCode config while preserving user overrides.
+- **Managed skill generation**: `src/skills/index.ts` writes bundled `author_*` and `test_*` skills to `tmpdir()/autocode-opencode-skills` and prepends that path to `cfg.skills.paths`.
+- **Interactive planning**: `plan` interviews with `question`, researches through delegated subagents, presents multiple solutions, gathers constraints, and must use `submit_plan` before exit.
+- **Approved-plan execution**: `build` only proceeds from an approved plan, delegates phases to `build_*` subagents, and may route back to planning with `plan_enter` when needed.
+- **Direct execution routing**: `execute` delegates non-planning work to code, OS, document, excel, review, troubleshooting, and query-oriented subagents.
+- **Read-only research**: `ask` delegates only to `query_*` subagents and is configured as a read-only reporting workflow.
+- **Documentation maintenance**: `execute_document` maintains memory docs through `document_*` specialists; its prompt requires `document_agents` to run last after `README.md` updates.
+- **Permission-scoped agents**: agent access is controlled through explicit permission maps; most agents start with `"*": "deny"`, while broader agents like `build_general` and `execute_os` are notable exceptions.
 
 ## User Roles
-- **OpenCode user**: asks for planning, execution, research, review, or documentation work.
-- **Planner/analyst**: clarifies requirements and submits implementation plans for approval.
-- **Operator/implementer**: runs approved plans or direct execution flows through delegated subagents.
-- **Documentation maintainer**: keeps memory docs aligned through `document_*` agents.
-- **Subagent**: performs only the tools, skills, and tasks allowed by its permission block.
+- **OpenCode user**: uses `ask`, `plan`, `build`, or `execute` for research or work delegation.
+- **Analyst/planner**: `plan` interviews users, researches options, and submits plans for approval.
+- **Project manager/executor**: `build` executes approved plans by delegating phases to `build_*` subagents.
+- **Direct-action delegator**: `execute` routes immediate requests without entering planning mode.
+- **Documentation maintainer**: `execute_document` and `document_*` agents keep memory docs aligned with repo facts.
+- **Scoped specialist subagent**: each `build_*`, `query_*`, `execute_*`, or `document_*` agent operates within its permission block.
 
 ## Constraints & Assumptions
-- This package is an OpenCode plugin, not a standalone app or web UI.
-- OpenCode provides authentication and tool permissions; repo code adds no separate auth layer.
-- Primary agents delegate specialist work rather than editing, testing, browsing, or shelling directly.
-- Complex requests should be redirected to `plan`; immediate requests should stay in `execute`.
-- Documentation agents may read and edit docs, but `execute_document` itself must only delegate.
-- UI/API review flows must start the target app, verify behavior, and clean up test data.
+- This repository is a plugin/library, not a standalone app, server, or frontend UI.
+- The plugin has no internal authentication layer; security is permission-centric and enforced through agent/tool authorization.
+- User OpenCode config can override bundled agent definitions, permissions, and commands.
+- Managed skills are generated at runtime into the OS temp directory and injected ahead of existing skill paths.
+- Primary agents are orchestrators; most implementation, browsing, git, and OS actions are delegated to specialists.
+- Browser work assumes manual user-managed authentication and read-only inspection of the running app.
+- `execute_os` has broad shell/filesystem access, and `build_general` has broad fallback permissions.
 
 ## Success Metrics
-- Users can solve common planning and execution tasks without leaving OpenCode.
-- Plans are approved before implementation starts.
-- Implemented features and reviews include concrete verification evidence.
-- Documentation updates stay aligned with actual code and agent permissions.
-- Managed skills are available automatically after plugin configuration.
+- Approved implementation plans go through `submit_plan` before execution.
+- Build/review workflows report concrete verification evidence instead of unsupported success claims.
+- Generated skills are written with valid frontmatter and injected without dropping existing skill paths.
+- Plugin config injection preserves existing user skill paths, URLs, and agent overrides.
 
 ## UX/UI Considerations
-This project is prompt- and command-driven inside OpenCode. UX relies on agent descriptions, structured question prompts, delegated subagent reports, and concise follow-up options rather than a standalone interface.
+This project has no frontend surface in the repo. UX is prompt-, command-, and workflow-driven inside OpenCode through agent descriptions, question flows, delegated reports, and follow-up options.
 
 ## User Stories
-- As an OpenCode user, I want the plugin to register specialized agents so that I can route work to the right workflow quickly.
-- As a planner, I want the plan agent to interview me and research context so that submitted plans are actionable.
-- As an operator, I want build agents to delegate each phase to specialists so that implementation, testing, and troubleshooting stay scoped.
-- As a reviewer, I want UI and API review flows to verify real behavior and clean up after themselves.
-- As a documentation maintainer, I want document agents to update owned memory files so that future planning uses current project context.
+- As an OpenCode user, I want bundled agents and commands loaded automatically so that I can use planning, execution, research, and documentation workflows in one place.
+- As a planner, I want `plan` to interview me, research options, and submit a plan so that implementation starts from approved direction.
+- As an operator, I want `build` to delegate each approved phase to the right specialist so that work stays scoped and reviewable.
+- As a researcher, I want `ask` to stay read-only and use query specialists so that reports do not modify the workspace.
+- As a documentation maintainer, I want `execute_document` and `document_*` specialists to update memory docs from repository evidence.
 
 **IMPORTANT**: Update this file whenever product requirements, user roles, or business rules change.
