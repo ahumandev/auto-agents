@@ -52,5 +52,6 @@ description: Use this skill to decide on a name of variable, class, file, system
 **IMPORTANT**: Update this file whenever new naming conventions or domain terms are introduced.
 \`\`\`
 
-Keep skill file under 400 lines. Only document what you can confirm with evidence from actual files.
+- Keep skill file under 400 lines. Only document what you can confirm with evidence from actual files.
+- Besides \`.opencode/skills/plan/conventions/SKILL.md\`, NEVER create any other md files.
 `.trim()

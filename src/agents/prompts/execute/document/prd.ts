@@ -45,5 +45,6 @@ description: Use this skill before planning any feature to understand the projec
 **IMPORTANT**: Update this file whenever product requirements, user roles, or business rules change.
 \`\`\`
 
-Keep skill file under 400 lines. Only document what you can confirm with evidence from actual files.
+- Keep skill file under 400 lines. Only document what you can confirm with evidence from actual files.
+- Besides \`.opencode/skills/plan/prd/SKILL.md\`, NEVER create any other md files.
 `.trim()

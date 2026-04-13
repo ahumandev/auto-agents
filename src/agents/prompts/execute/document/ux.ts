@@ -1,7 +1,7 @@
 export const documentUxPrompt = `
 # UX Documentation Agent
 
-You own and maintain \`.opencode/skills/plan/ux/SKILL.md\`.
+You own and maintain \`.opencode/skills/design/ux/SKILL.md\`.
 
 **Target Audience: Frontend Web Projects ONLY.** If not a frontend web project, report that no UX documentation is needed and do not create the skill file.
 
@@ -19,13 +19,13 @@ Analyze the codebase to fill any gaps.
    - Check package.json for styling dependencies
    - Inspect components to see how styles are imported and applied
 4. **Check & Write**: Update in place if exists, create fresh if not
-5. **Report** back
+5. **Report** back what was documented
 
 ## Skill File Format
 
 \`\`\`markdown
 ---
-name: plan_ux
+name: design_ux
 description: Use this skill to understand UI design, interactions, styling conventions, browser navigation and user UX flow rules.
 ---
 
@@ -60,5 +60,6 @@ description: Use this skill to understand UI design, interactions, styling conve
 **IMPORTANT**: Update this file whenever navigation, styling, or UX patterns change.
 \`\`\`
 
-Keep skill file under 400 lines.
+- Keep skill file under 400 lines.
+- Besides \`.opencode/skills/design/ux/SKILL.md\`, NEVER create any other md files.
 `.trim()

@@ -10,12 +10,11 @@ import { buildReviewApiPrompt } from "./prompts/build/review_api";
 import { buildReviewUiPrompt } from "./prompts/build/review_ui";
 import { buildTestPrompt } from "./prompts/build/test";
 import { buildTroubleshootPrompt } from "./prompts/build/troubleshoot";
+import { documentAgentsPrompt } from "./prompts/execute/document/agents"
 import { documentConventionsPrompt } from "./prompts/execute/document/conventions"
 import { documentDesignPrompt } from "./prompts/execute/document/design"
 import { documentInstallPrompt } from "./prompts/execute/document/install"
 import { documentPrdPrompt } from "./prompts/execute/document/prd"
-import { documentReadmePrompt } from "./prompts/execute/document/readme"
-import { documentSecurityPrompt } from "./prompts/execute/document/security"
 import { documentUxPrompt } from "./prompts/execute/document/ux"
 import { executeAuthorPrompt } from "./prompts/execute/author";
 import { executeCodePrompt } from "./prompts/execute/code";
@@ -50,8 +49,7 @@ const agents: AgentMap = {
             question: "allow",
             read: "allow",
             skill: {
-                "*": "deny",
-                "plan*": "allow",
+                "*": "allow",
             },
             task: {
                 "*": "deny",
@@ -99,7 +97,7 @@ const agents: AgentMap = {
             doom_loop: "ask",
             skill: {
                 "*": "deny",
-                "code*": "allow",
+                "design*": "allow",
             },
             task: {
                 "*": "deny",
@@ -153,6 +151,9 @@ const agents: AgentMap = {
             "*": "allow",
             doom_loop: "ask",
             external_directory: "ask",
+            skill: {
+                "*": "allow"
+            },
             task: {
                 "*": "allow",
                 ask: "deny",
@@ -177,7 +178,7 @@ const agents: AgentMap = {
             doom_loop: "ask",
             skill: {
                 "*": "deny",
-                "code*": "allow",
+                "design*": "allow",
             },
             task: {
                 "*": "deny",
@@ -321,6 +322,25 @@ const agents: AgentMap = {
         tier: "balanced",
     },
 
+    document_agents: {
+        color: "#802020",
+        description: "Task `document_agents` to convert latest `README.md` to `AGENTS.md`",
+        hidden: true,
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "deny",
+            edit: "allow",
+            glob: "allow",
+            grep: "allow",
+            list: "allow",
+            read: "allow",
+        },
+        prompt: documentAgentsPrompt,
+        temperature: 0.3,
+        tier: "fast",
+    },
+
     document_conventions: {
         color: "#802020",
         description: "Task `document_conventions` to document naming conventions and project terminology",
@@ -336,7 +356,7 @@ const agents: AgentMap = {
             lsp: "allow",
             read: "allow",
         },
-        prompt: String(documentConventionsPrompt),
+        prompt: documentConventionsPrompt,
         temperature: 0.3,
         tier: "fast",
     },
@@ -400,45 +420,6 @@ const agents: AgentMap = {
         tier: "fast",
     },
 
-    document_readme: {
-        color: "#802020",
-        description: "Task `document_readme` to document README.md and AGENTS.md",
-        hidden: true,
-        mode: "subagent",
-        permission: {
-            "*": "deny",
-            doom_loop: "deny",
-            edit: "allow",
-            glob: "allow",
-            grep: "allow",
-            list: "allow",
-            read: "allow",
-        },
-        prompt: documentReadmePrompt,
-        temperature: 0.3,
-        tier: "fast",
-    },
-
-    document_security: {
-        color: "#802020",
-        description: "Task `document_security` to document security architecture",
-        hidden: true,
-        mode: "subagent",
-        permission: {
-            "*": "deny",
-            doom_loop: "deny",
-            edit: "allow",
-            glob: "allow",
-            grep: "allow",
-            list: "allow",
-            lsp: "allow",
-            read: "allow",
-        },
-        prompt: documentSecurityPrompt,
-        temperature: 0.3,
-        tier: "fast",
-    },
-
     document_ux: {
         color: "#802020",
         description: "Task `document_ux` to document UX flows, navigation, and styling patterns",
@@ -472,8 +453,7 @@ const agents: AgentMap = {
             question: "allow",
             read: "allow",
             skill: {
-                "*": "allow",
-                "code*": "deny"
+                "*": "allow"
             },
             task: {
                 "*": "allow",
@@ -529,7 +509,7 @@ const agents: AgentMap = {
             read: "allow",
             skill: {
                 "*": "deny",
-                "code*": "allow",
+                "design*": "allow",
             },
             "todo*": "allow"
         },
@@ -545,6 +525,8 @@ const agents: AgentMap = {
         permission: {
             "*": "deny",
             doom_loop: "deny",
+            edit: "allow",
+            read: "allow",
             task: {
                 "*": "deny",
                 "document_*": "allow"
@@ -621,6 +603,10 @@ const agents: AgentMap = {
             list: "allow",
             "pty*": "allow",
             read: "allow",
+            skill: {
+                "*": "deny",
+                "design_install": "allow",
+            },
             "todo*": "allow",
         },
         prompt: executeOsPrompt,
@@ -690,6 +676,10 @@ const agents: AgentMap = {
             '*': "deny",
             "chrome*": "allow",
             "doom_loop": "deny",
+            skill: {
+                "*": "deny",
+                "design_ux": "allow",
+            },
             "todo*": "allow"
         },
         prompt: queryBrowserPrompt,
@@ -714,7 +704,7 @@ const agents: AgentMap = {
             read: "allow",
             skill: {
                 "*": "deny",
-                "code*": "allow",
+                "design*": "allow",
             },
         },
         prompt: queryCodePrompt,
@@ -799,7 +789,11 @@ const agents: AgentMap = {
             grep: "allow",
             list: "allow",
             lsp: "allow",
-            read: "allow"
+            read: "allow",
+            skill: {
+                "*": "deny",
+                "design_install": "allow",
+            },
         },
         prompt: queryTextPrompt,
         temperature: 0.1,
