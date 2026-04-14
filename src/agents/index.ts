@@ -21,6 +21,7 @@ import { executeCodePrompt } from "./prompts/execute/code";
 import { executeDocumentPrompt } from "./prompts/execute/document"
 import { executeExcelPrompt } from "./prompts/execute/excel";
 import { executeGitCommitPrompt } from "./prompts/execute/git_commit";
+import { executeGitConflictPrompt } from "@/agents/prompts/execute/git_conflict";
 import { executeOsPrompt } from "./prompts/execute/os";
 import { executePrompt } from "./prompts/execute";
 import { executeScriptPrompt } from "./prompts/execute/script";
@@ -76,7 +77,7 @@ const agents: AgentMap = {
             task: {
                 "*": "deny",
                 "build*": "allow",
-                "execute_git_commit": "allow"
+                "execute_git_*": "allow"
             },
             "task_resume": "allow",
             "todo*": "allow",
@@ -562,13 +563,13 @@ const agents: AgentMap = {
     },
 
     execute_git_commit: {
-        color: "#808020",
-        description: "Task `build_git_commit` only if reviewing changes and creating professional git commits",
+        color: "#802020",
+        description: "Task `execute_git_commit` only if reviewing changes and creating professional git commits",
         hidden: true,
         mode: "subagent",
         permission: {
             "*": "deny",
-            doom_loop: "ask",
+            doom_loop: "deny",
             git_git_add: "allow",
             git_git_commit: "allow",
             git_git_log: "allow",
@@ -584,6 +585,42 @@ const agents: AgentMap = {
         },
         prompt: executeGitCommitPrompt,
         temperature: 0.5,
+        tier: "balanced",
+    },
+
+    execute_git_conflict: {
+        color: "#802020",
+        description: "Task `execute_git_conflict` to resolve git merge conflicts",
+        hidden: true,
+        mode: "subagent",
+        permission: {
+            "*": "deny",
+            doom_loop: "deny",
+            edit: "allow",
+            git_git_add: "allow",
+            git_git_commit: "allow",
+            git_git_log: "allow",
+            git_git_status: "allow",
+            glob: "allow",
+            grep: "allow",
+            list: "allow",
+            lsp: "allow",
+            read: "allow",
+            task: {
+                "*": "deny",
+                execute_code: "allow",
+                execute_git_commit: "allow",
+                execute_os: "allow",
+                query_code: "allow",
+                query_git: "allow",
+                query_os: "allow",
+                query_text: "allow"
+            },
+            "task_resume": "allow",
+            "todo*": "allow",
+        },
+        prompt: executeGitConflictPrompt,
+        temperature: 0.3,
         tier: "balanced",
     },
 
