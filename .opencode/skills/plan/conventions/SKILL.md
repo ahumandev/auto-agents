@@ -19,39 +19,41 @@ description: Use this skill to decide on a name of variable, class, file, system
 
 ## Naming Rules
 ### Agent Families
-**Why:** Prefixes encode role and permissions.
+**Purpose:** Prefixes encode role and permissions.
 **Pattern:** User-facing primaries use bare names (`ask`, `plan`, `build`, `execute`). Delegated specialists use snake_case family prefixes: `build_*`, `query_*`, `execute_*`, and `document_*`.
 
 ### Documentation Agent Ownership
-**Why:** Each maintained doc has a single canonical owner.
+**Purpose:** Each maintained doc has a single canonical owner.
 **Pattern:** Ownership is declared centrally in `src/agents/prompts/execute/document.ts`. Examples: `document_conventions` → `.opencode/skills/plan/conventions/SKILL.md`, `document_design` → `.opencode/skills/design/code/SKILL.md`, `document_install` → `.opencode/skills/design/install/SKILL.md`, `document_prd` → `.opencode/skills/plan/prd/SKILL.md`.
 
 ### Prompt Export Names
-**Why:** Prompt constants mirror agent identifiers predictably.
+**Purpose:** Prompt constants mirror agent identifiers predictably.
 **Pattern:** Prompt exports use the agent/topic name plus `Prompt`: `buildFeaturePrompt`, `queryCodePrompt`, `documentConventionsPrompt`, `executePrompt`, `planPrompt`, `askPrompt`.
 
 ### Prompt File Layout
-**Why:** File paths mirror agent namespace depth.
+**Purpose:** File paths mirror agent namespace depth.
 **Pattern:** Primary prompts live under `src/agents/prompts/` (`ask.ts`, `plan.ts`, `build.ts`, `execute.ts`). Specialist prompts live in namespace folders like `build/feature.ts`, `query/code.ts`, `execute/document/conventions.ts`.
 
 ### Verification Build Names
-**Why:** Verification phases use dedicated review agent names.
+**Purpose:** Verification phases use dedicated review agent names.
 **Pattern:** API verification uses `build_review_api`, UI verification uses `build_review_ui`, and test-writing/fixing uses `build_test`.
 
 ### Skill Names and Paths
-**Why:** Built-in skills are generated from metadata, not stored directly at their runtime location.
+**Purpose:** Built-in skills are generated from metadata, not stored directly at their runtime location.
 **Pattern:** Managed skill names use `<domain>_<topic>` (`author_article`, `test_jest`). Their runtime markdown path is built from `directory` segments plus `SKILL.md`, for example `directory: ["author", "article"]` → `author/article/SKILL.md`.
 
 ### Generated Skill Injection
-**Why:** Built-in skills must override path order without duplicating entries.
+**Purpose:** Built-in skills must override path order without duplicating entries.
 **Pattern:** `injectGeneratedSkillsPath()` prepends the generated skills root to `cfg.skills.paths` and removes duplicate occurrences of that same generated path only.
 
 ### Model Tier Keys
-**Why:** Agent configs rely on a small fixed capability vocabulary.
+**Purpose:** Agent configs rely on a small fixed capability vocabulary.
 **Pattern:** `tier` is always one of `smart`, `balanced`, or `fast`.
 
 ### Package Naming Split
-**Why:** Repo and install package names differ in a non-obvious way.
+**Purpose:** Repo and install package names differ in a non-obvious way.
 **Pattern:** The repo/package uses `autocode` (`package.json` name and `.opencode/plugin/autocode.ts`), while installation docs reference the published plugin package as `@autocode-ai/plugin`.
 
-**IMPORTANT**: Update this file whenever new naming conventions or domain terms are introduced.
+---
+
+**IMPORTANT**: Update `.opencode/skills/plan/conventions/SKILL.md` whenever new naming conventions or domain terms are introduced.

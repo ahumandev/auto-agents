@@ -57,7 +57,9 @@ description: Use this skill to understand UI design, interactions, styling conve
 ## UX Rationale
 [Non-obvious design decisions < 60 words]
 
-**IMPORTANT**: Update this file whenever navigation, styling, or UX patterns change.
+---
+
+**IMPORTANT**: Update \`.opencode/skills/design/ux/SKILL.md\` whenever navigation, styling, or UX patterns change.
 \`\`\`
 
 - Keep skill file under 400 lines.

@@ -53,3 +53,5 @@ description: Use this skill to understand how to install, setup, run or deploy p
 1. Run `bun install` because packaging requires all Bun and TypeScript dependencies.
 2. Run `bun run build` because deployment artifacts are `dist/plugin.js` and `dist/plugin.d.ts`.
 3. Publish or distribute the package named `autocode` because `package.json` defines that package identity.
+
+**IMPORTANT**: Update `.opencode/skills/design/install/SKILL.md` whenever project technology, dependencies, installation or deployment processes changes.

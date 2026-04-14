@@ -53,7 +53,9 @@ description: Use this skill before implementing any feature to understand the pr
 ## Known Risks & Anti-Patterns
 - **[Risk/Anti-pattern]**: [Reason it exists < 20 words]
 
-**IMPORTANT**: Update this file whenever architecture, APIs, data models, security, or integrations change.
+---
+
+**IMPORTANT**: Update \`.opencode/skills/design/tech/SKILL.md\` whenever architecture, APIs, data models, security, or integrations change.
 \`\`\`
 
 - Keep skill file under 500 lines. Only document what you can confirm with evidence from actual files.

@@ -51,4 +51,4 @@ This project has no frontend surface in the repo. UX is prompt-, command-, and w
 - As a researcher, I want `ask` to stay read-only and use query specialists so that reports do not modify the workspace.
 - As a documentation maintainer, I want `execute_document` and `document_*` specialists to update memory docs from repository evidence.
 
-**IMPORTANT**: Update this file whenever product requirements, user roles, or business rules change.
+**IMPORTANT**: Update `.opencode/skills/plan/prd/SKILL.md` whenever product requirements, user roles, or business rules change.

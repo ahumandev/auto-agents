@@ -32,8 +32,4 @@ Bundle OpenCode agents, commands, and generated skills for planning, execution, 
 - `src/tools/index.test.ts`: Tests task resume wiring
 
 # Rules
-- Treat this repo as a plugin/library, not a standalone app.
-- Review permission changes in `src/agents/index.ts`
-- Check naming consistency across prompt and agent families.
-- Verify generated skill behavior and related tests.
-- Prevent drift between root docs and `.opencode/skills/plan/*` memory docs.
+- Treat this repo as opencode plugin, not a standalone app.

@@ -42,7 +42,9 @@ description: Use this skill before planning any feature to understand the projec
 ## User Stories
 - As a [role], I want to [action] so that [outcome]
 
-**IMPORTANT**: Update this file whenever product requirements, user roles, or business rules change.
+---
+
+**IMPORTANT**: Update \`.opencode/skills/plan/prd/SKILL.md\` whenever product requirements, user roles, or business rules change.
 \`\`\`
 
 - Keep skill file under 400 lines. Only document what you can confirm with evidence from actual files.

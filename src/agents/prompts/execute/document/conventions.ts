@@ -46,10 +46,12 @@ description: Use this skill to decide on a name of variable, class, file, system
 
 ## Naming Rules
 ### [Convention Name]
-**Why:** [Purpose < 20 words]
+**Purpose:** [Purpose < 20 words]
 **Pattern:** [Rule with concrete examples]
 
-**IMPORTANT**: Update this file whenever new naming conventions or domain terms are introduced.
+---
+
+**IMPORTANT**: Update \`.opencode/skills/plan/conventions/SKILL.md\` whenever new naming conventions or domain terms are introduced.
 \`\`\`
 
 - Keep skill file under 400 lines. Only document what you can confirm with evidence from actual files.

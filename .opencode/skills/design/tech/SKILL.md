@@ -52,4 +52,4 @@ No internal auth layer exists. Security is permission-centric: agents mostly def
 - **Ephemeral generated skills**: Tempdir output must be regenerated outside the repo.
 - **User override precedence**: Host config can weaken bundled default restrictions.
 
-**IMPORTANT**: Update this file whenever architecture, APIs, data models, security, or integrations change.
+**IMPORTANT**: Update `.opencode/skills/design/tech/SKILL.md` whenever architecture, APIs, data models, security, or integrations change.

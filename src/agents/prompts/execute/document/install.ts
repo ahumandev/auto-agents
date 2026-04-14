@@ -60,6 +60,10 @@ description: Use this skill to understand how to install, setup, run or deploy p
 ---
 
 [INSTALLATION REPORT SUMMARY]
+
+---
+
+**IMPORTANT**: Update \`.opencode/skills/design/install/SKILL.md\` whenever project technology, dependencies, installation or deployment processes changes.
 \`\`\`
 
 Replace \`[INSTALLATION REPORT SUMMARY]\` with summary of COMPLETE INSTALLATION REPORT

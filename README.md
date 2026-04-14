@@ -101,8 +101,6 @@ flowchart LR
 
 - **Primary agent**: direct user-facing agent like `ask`, `plan`, `build`, or `execute`.
 - **Subagent**: delegated agent with `mode: "subagent"`.
-- **Managed skill**: built-in skill from `src/skills/**` rendered to runtime `SKILL.md`.
-- **Generated skills root**: temp directory `autocode-opencode-skills`.
 - **Documentation agent**: `document_*` subagent with one assigned documentation area.
 - **Agentic memory docs**: agent-maintained docs under `.opencode/skills/**`.
 - **Dev shim**: `.opencode/plugin/autocode.ts` re-exporting `dist/plugin.js` for local development.
