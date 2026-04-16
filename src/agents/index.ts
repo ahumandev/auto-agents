@@ -451,6 +451,9 @@ const agents: AgentMap = {
         mode: "primary",
         permission: {
             "*": "deny",
+            autocode_backlog_list: "allow",
+            autocode_backlog_read: "allow",
+            autocode_ready_job_create: "allow",
             task_resume: "allow",
             question: "allow",
             read: "allow",
@@ -682,6 +685,7 @@ const agents: AgentMap = {
         mode: "primary",
         permission: {
             "*": "deny",
+            "autocode_backlog*": "allow",
             codesearch: "allow",
             doom_loop: "ask",
             plan_exit: "allow",

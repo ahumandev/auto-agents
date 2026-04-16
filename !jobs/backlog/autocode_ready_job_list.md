@@ -1,0 +1,33 @@
+# Create a tool called `autocode_ready_job_list`
+
+Input parameters: None
+Output format: JSON
+Output example:
+
+```json
+{
+  "ready": [
+    {
+      "name": "autocode_ready_job_start",
+      "description": "# Create a tool called `autocode_backlog_list`", 
+    },
+    ...
+  ]
+}
+```
+
+(Note `.md` extension was dropped from name)
+
+## Process
+
+1. List all md files in `!jobs/backlog`
+2. Format JSON
+3. Respond JSON
+
+# Tests
+
+Add test that mock directory listings and ensure tool respond with JSON in correct format.
+
+# Document
+
+Task `execute_document` to document that `!jobs/backlog` contains unrefined user project requirements for potential future tasks.

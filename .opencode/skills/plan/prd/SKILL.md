@@ -16,6 +16,8 @@ This repository ships an OpenCode plugin that injects a curated agent catalog, c
 - **Direct execution routing**: `execute` delegates non-planning work to code, OS, document, excel, review, troubleshooting, and query-oriented subagents.
 - **Read-only research**: `ask` delegates only to `query_*` subagents and is configured as a read-only reporting workflow.
 - **Documentation maintenance**: `execute_document` maintains memory docs through `document_*` specialists; its prompt requires `document_agents` to run last after `README.md` updates.
+- **Backlog operations**: backlog work is handled by dedicated tools; `autocode_backlog_list` enumerates `!jobs/backlog` items and `autocode_backlog_read` reads an individual backlog item.
+- **Ready job promotion**: `autocode_ready_job_create` accepts description, problem, solution, metric, and plan inputs and writes a refined job to `!jobs/ready/{job}/` with `goal.md` and `plan.md`.
 - **Permission-scoped agents**: agent access is controlled through explicit permission maps; most agents start with `"*": "deny"`, while broader agents like `build_general` and `execute_os` are notable exceptions.
 
 ## User Roles

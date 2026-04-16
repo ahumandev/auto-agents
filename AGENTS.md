@@ -15,6 +15,8 @@ Bundle OpenCode agents, commands, and generated skills for planning, execution, 
 - **Bundled commands**: Register document and resume commands @ `src/commands/index.ts`
 - **Managed skills**: Generate `author_*` and `test_*` skills @ `src/skills/index.ts`
 - **Resume tool**: Resume interrupted delegated sessions @ `src/tools/task_resume.ts`
+- **Backlog tools**: Operate on `!jobs/backlog`; `autocode_backlog_list` lists entries and `autocode_backlog_read` reads one item
+- **Ready job tool**: `autocode_ready_job_create` promotes a refined job to `!jobs/ready/{job}/` with `goal.md` and `plan.md`
 
 # Architecture
 - **Plugin entry**: TypeScript OpenCode plugin @ `src/plugin.ts`
@@ -26,6 +28,10 @@ Bundle OpenCode agents, commands, and generated skills for planning, execution, 
 - **Agent memory docs**: Markdown planning memory @ `.opencode/skills/plan/`
 
 # File Structure
+- `!jobs/backlog`: Unrefined user requirements for future tasks
+- `autocode_backlog_list`: Lists backlog entries available under `!jobs/backlog`
+- `autocode_backlog_read`: Reads the contents of a selected backlog entry
+- `autocode_ready_job_create`: Creates a ready job under `!jobs/ready/{job}/` with `goal.md` and `plan.md` from description, problem, solution, metric, and plan inputs
 - `.opencode/plugin/autocode.ts`: Local dev shim to dist plugin
 - `.opencode/opencode.jsonc`: Local OpenCode config schema file
 - `src/skills/index.test.ts`: Tests generated skill injection
@@ -33,3 +39,6 @@ Bundle OpenCode agents, commands, and generated skills for planning, execution, 
 
 # Rules
 - Treat this repo as opencode plugin, not a standalone app.
+- For repo changes, prefer reusing existing utilities before creating new utility helpers.
+- Treat `src/utils/tools.ts` as the shared tool utility and error-handling entrypoint for tool work.
+- Keep tool error handling consistent by using the shared mechanism from `src/utils/tools.ts` and the generic error-handling prompt at `src/agents/prompts/error.ts`.
