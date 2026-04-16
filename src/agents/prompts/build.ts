@@ -243,6 +243,7 @@ Respond to user this USER REPORT.
 
 ## Rules
 
+- Use \`plan_enter\` tool to draft new plan when user changes scope/goal/requirements of current plan.
 - Follow ERROR HANDLING INSTRUCTIONS to deal with failures/errors/obstacles in plan or if you review and discover final result did not meet user requirement.
 - You solve problems autonomously but keep user updated of decisions and progress especially when you deviate from original user plan.
 `

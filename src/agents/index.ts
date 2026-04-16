@@ -47,6 +47,7 @@ const agents: AgentMap = {
         permission: {
             "*": "deny",
             codesearch: "allow",
+            plan_enter: "allow",
             question: "allow",
             read: "allow",
             skill: {
@@ -470,7 +471,7 @@ const agents: AgentMap = {
 
     execute_author: {
         color: "#802020",
-        description: "Task `execute_author` to create or update documents, articles, agentic instructions or general Markdown; It NEVER edit source code or system config",
+        description: "Task `execute_author` to create or update md (Markdown) documents (like articles, tutorials, meeting agendas) or agentic instructions (like commands, skills or plans); It NEVER edit source code, program scripts or system config",
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -521,7 +522,7 @@ const agents: AgentMap = {
 
     execute_document: {
         color: "#B03030",
-        description: "Task `execute_document` to maintain agent/project memory docs for agents via document_* specialists",
+        description: "Task `execute_document` to update `AGENTS.md`, `README.md`, subagent skill files or to remember important architectural/design decisions or document project specifications.",
         mode: "subagent",
         permission: {
             "*": "deny",
@@ -839,11 +840,13 @@ const agents: AgentMap = {
 
     query_web: {
         color: "#208020",
-        description: "Task `query_web` to search and read public online web sources: documentation, articles, forums, GitHub, news",
+        description: "Task `query_web` to search and read public online web sources: documentation, articles, forums, GitHub, news, framework API/SDKs",
         hidden: true,
         mode: "subagent",
         permission: {
             "*": "deny",
+            codesearch: "allow",
+            "context7*": "allow",
             doom_loop: "deny",
             "todo*": "allow",
             "websearch*": "allow",

@@ -17,7 +17,7 @@ Your role is to review recent changes and create a professional git commit with 
 ### STEP 1: Review Changes
 
 1. Summarize user request to "git commit purpose" in < 50 characters
-2. If "git commit purpose" is not clear, task \`query_git\` to get summarized (< 80 characters per change) diff of staged and unstaged changes and analyze the diff and determine "git commit purpose" (< 50 characters)
+2. If "git commit purpose" is not clear, task \`query_git\` to get diff of staged and unstaged changes and analyze the diff and determine "git commit purpose"
 
 ### STEP 2: Add Unstaged Files
 
@@ -88,18 +88,15 @@ Provides additional contextual information:
 
 Contains a concise description of the change. 
 - Is a **mandatory** part
-- Use the imperative, present tense: "change" not "changed" nor "changes"
-- Think of "This commit will..." or "This commit should..."
+- Description is < 50 characters
 - **NEVER** capitalize the first letter
 - **NEVER** end the description with a period (\`.\`)
-- Is < 80 characters
 
 <optional body>
 
 Should include the motivation for the change and contrast this with previous behavior.
 - Is an **optional** part
 - Use the imperative, present tense: "change" not "changed" nor "changes"
-- Is < 80 characters
 
 <optional footer>
 
@@ -163,6 +160,7 @@ Use \`git_\` tools to commit message and changes to git.
 
 ## Rules
 - NEVER use generic messages like "update" or "fix".
+- ALWAYS use the imperative, present tense: "change" not "changed" nor "changes"
 - ALWAYS review the diff before committing.
 - ALWAYS report commit failures or success to user
 `

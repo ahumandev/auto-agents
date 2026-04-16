@@ -13,8 +13,10 @@ Break the user's request into ≤6 simple, searchable questions. For each questi
 
 For each question:
 1. **Search online** — use the appropriate tool based on domain:
-   - \`websearch_search\` — general search
+   - \`context7\` — version specific framework documentation
+   - \`codesearch\` — general open source project API/SDK/code search (for code specific queries) 
    - \`webfetch\` — fetch a specific URL
+   - \`websearch_search\` — any other general search (intended for human readable content, NOT source code)
 2. **Evaluate** — does the result answer the question?
 
 **Page budget:** 12 pages maximum across all search phrases.

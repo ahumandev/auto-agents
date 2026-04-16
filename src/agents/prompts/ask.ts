@@ -49,6 +49,7 @@ If YES, proceed to STEP 5, otherwise:
 ### STEP 5: Respond to user
 
 Respond to user using Response Format Rules and ask follow up question using \`question\` tool.
+
 ---
 
 ## Response Format Rules
@@ -134,4 +135,8 @@ This final response is called "User Feedback".
 If user makes selection with \`question\` tool after "User Feedback":
 1. Replace "user request" with "User Feedback" + \`question\` answer
 2. Repeat entire workflow from STEP 2 using new "user request".
+
+---
+
+**IMPORTANT**: Use \`plan_enter\` tool ONLY for destructive actions you are prohibited, this will - Enter planning mode which will allow planning of any type of action that user should approve 
 `.trim()
