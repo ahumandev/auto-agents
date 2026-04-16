@@ -1,6 +1,7 @@
 import { tool } from "@opencode-ai/plugin"
 import type { AssistantMessage, Message, OpencodeClient, Part, Session, UserMessage, SessionPromptAsyncData } from "@opencode-ai/sdk"
 import type { PermissionConfig } from "@opencode-ai/sdk/v2"
+import { createAbortResponse, createRetryResponse } from "@/utils/tools"
 
 const PROMPT_TASK_RESUME = "You have been interrupted, therefore you MUST:\n1. Use `task_resume` tool to resume previous tasks\n2. Then resume your own work"
 const PROMPT_WORK_RESUME = "Resume"
@@ -382,7 +383,7 @@ export function createTaskResumeTool(client: OpencodeClient) {
                 })
 
                 if (sessionResponse.error || !sessionResponse.data) {
-                    return `Unable to inspect current session ${context.sessionID}.`
+                    return createAbortResponse("inspect current session", sessionResponse.error ?? `Current session unavailable: ${context.sessionID}`)
                 }
 
                 const state: ResumeState = {
@@ -395,7 +396,7 @@ export function createTaskResumeTool(client: OpencodeClient) {
 
                 if (state.resumed.size === 0) {
                     if (state.errors.length > 0) {
-                        return `No interrupted descendants found.${state.errors[0]} `
+                        return createRetryResponse("resume interrupted descendants", state.errors[0], "Retry `task_resume` once. If the same failure continues, stop and ask the user how to proceed.")
                     }
 
                     return "No interrupted descendants found."
@@ -406,11 +407,10 @@ export function createTaskResumeTool(client: OpencodeClient) {
                     return `${summary} You can now resume your own work.`
                 }
 
-                return `${summary} ${state.errors[0]} `
+                return `${summary} ${createRetryResponse("resume interrupted descendants", state.errors[0], "Retry `task_resume` only if more interrupted descendant work is still expected.")}`
             }
             catch (error) {
-                const message = error instanceof Error ? error.message : String(error)
-                return `Unable to resume interrupted descendants: ${message} `
+                return createAbortResponse("resume interrupted descendants", error)
             }
         },
     })

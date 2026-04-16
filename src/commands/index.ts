@@ -19,6 +19,12 @@ type CommandMap = NonNullable<Config["command"]>
 
 export const commands: CommandMap = {
 
+    "backlog": {
+        agent: "plan",
+        description: "Plan a backlog item",
+        template: "List backlog items with `autocode_backlog_list` tool.",
+    },
+
     "document": {
         agent: "execute_document",
         description: "Documentation the entire project",

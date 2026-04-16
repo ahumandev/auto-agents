@@ -60,6 +60,7 @@ This project does not expose a standalone app URL.
 - Use `build` after a plan is approved.
 - Use `execute` for direct work that does not need planning.
 - Use documentation flows through `execute_document` and `document_*` specialists.
+- Use backlog tools for `!jobs/backlog` operations: `autocode_backlog_list` lists backlog entries and `autocode_backlog_read` reads a selected backlog item.
 
 ## Deployment
 
@@ -103,4 +104,7 @@ flowchart LR
 - **Subagent**: delegated agent with `mode: "subagent"`.
 - **Documentation agent**: `document_*` subagent with one assigned documentation area.
 - **Agentic memory docs**: agent-maintained docs under `.opencode/skills/**`.
+- **`!jobs/backlog`**: unrefined user project requirements for potential future tasks.
+- **`autocode_backlog_list`**: tool for listing available backlog entries under `!jobs/backlog`.
+- **`autocode_backlog_read`**: tool for reading the contents of a selected backlog entry.
 - **Dev shim**: `.opencode/plugin/autocode.ts` re-exporting `dist/plugin.js` for local development.
