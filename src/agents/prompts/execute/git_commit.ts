@@ -45,18 +45,18 @@ Decide if it should be included in commit:
 Commit message format:
 
 \`\`\`
-<optional ticket id> <type>(<optional scope>) - <description>
+<ticket id> <type>(<scope>) - <description>
 <empty line as separator>
-<optional body>
+<motivation>
 <empty line as separator>
-<optional footer>
+<changes>
 \`\`\`
 
 Explanation:
 
-<optional ticket id>
+<ticket id>
 
-- Is optional
+- Is optional, omit if ticket id is unknown
 - Format: <PROJECT>-<NUMBER>:
 - Examples: CARDATA-1234, MYPROJECT-10000
 
@@ -73,10 +73,10 @@ Explanation:
 - \`ops\` Commits that affect operational aspects like infrastructure (IaC), deployment scripts, CI/CD pipelines, backups, monitoring, or recovery procedures, ...
 - \`chore\` Commits that represent tasks like initial commit, modifying \`.gitignore\`, ...
 
-<optional scope>
+<scope>
 
 Provides additional contextual information:
-- Is optional
+- Is optional, omit if scope is unknown
 - Allowed scopes vary and are typically defined by the specific project
 - **Do not** use issue identifiers as scopes
 
@@ -92,63 +92,53 @@ Contains a concise description of the change.
 - **NEVER** capitalize the first letter
 - **NEVER** end the description with a period (\`.\`)
 
-<optional body>
+<motivation>
 
 Should include the motivation for the change and contrast this with previous behavior.
-- Is an **optional** part
+- Is an **optional** part, omit if reason for commit is unknown
 - Use the imperative, present tense: "change" not "changed" nor "changes"
+- NEVER wrap long sentences
 
-<optional footer>
+<changes>
 
-Should contain issue references and informations about **Breaking Changes**
-- Is an **optional** part, except if the commit introduce breaking changes
-- *Optionally* reference issue identifiers (e.g., \`Closes #123\`, \`Fixes JIRA-456\`) 
-- **Breaking Changes** **must** start with the word \`BREAKING CHANGE:\`
-  - For a single line description just add a space after \`BREAKING CHANGE:\`
-  - For a multi line description add two new lines after \`BREAKING CHANGE:\`
-- **References**: If online resources were consulted for changes, add a line with \`SEE ALSO:\` followed by the URL(s) in bullet points
+Bullet point list of **Breaking Changes**
+- NEVER include non-destructive changes like "Update documentation", "Renamed internal variable", "Created new test", "Formatted code"
+- Omit this section if there are no breaking changes
+- Title before bullet point list is "Breaking Changes:"
+- 1 change description per bullet point
+- Start each bullet with emojis to highlight type of change
+- Keep emojis consistent (same action = same emoji)
+- Be specific: Usual actual identifiers/commands/urls to describe objects
 
 #### Examples
 
-- \`\`\`
-  JIRA-1234: feat - add email notifications on new direct messages
-  \`\`\`
-- \`\`\`
-  feat(shopping cart) - add the amazing button
-  \`\`\`
-- \`\`\`
-  TICKET-10000: feat! - remove ticket list endpoint
+\`\`\`
+PROJ-123 feat(auth) - add oauth2 support
 
-  refers to JIRA-1337
+Implement OAuth2 flow for third-party authentication providers to replace legacy session-based login.
+\`\`\`
 
-  BREAKING CHANGE: ticket endpoints no longer supports list all entities.
-  \`\`\`
-- \`\`\`
-  fix(shopping-cart) - prevent order an empty shopping cart
-  \`\`\`
-- \`\`\`
-  fix(api): fix wrong calculation of request body checksum
-  \`\`\`
-- \`\`\`
-  fix - add missing parameter to service call
+\`\`\`
+fix(api) - validate user input on registration
 
-  The error occurred due to <reasons>.
-  \`\`\`
-- \`\`\`
-  perf - decrease memory footprint for determine unique visitors by using HyperLogLog
-  \`\`\`
-- \`\`\`
-  build - update dependencies
-  \`\`\`
-- \`\`\`
-  build(release) - bump version to 1.0.0
-  \`\`\`
-- \`\`\`
-  refactor - implement fibonacci number calculation as recursion
-  \`\`\`
-- \`\`\`
-  style - remove empty line
-  \`\`\`
+Ensure all registration fields are sanitized before processing to prevent SQL injection vulnerabilities. Previous implementation lacked proper validation.
+\`\`\`
+
+\`\`\`
+feat(database)!: drop deprecated users table
+
+Remove the legacy users tables as part of the migration to the new schema.
+
+Breaking Changes:
+- 🗑️ dropped t_users table from the prod_db database
+- 🗑️ dropped t_users_links table from the prod_db database
+\`\`\`
+
+\`\`\`
+docs - update installation instructions
+
+Update the INSTALL.md file with the new system requirements and dependency setup steps.
+\`\`\`
 
 ---
 
